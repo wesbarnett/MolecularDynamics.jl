@@ -36,17 +36,17 @@ end
 
 function output(gmx)
 
-     for i in 1:gmx.no_configs 
+     for conf in 1:gmx.no_configs 
 
-	 	println(string("Time (ps): ", gmx.time[i]))
+	 	println(string("Time (ps): ", gmx.time[conf]))
 		println("Coordinates: ")
 
-		for l in keys(gmx.x)
-			println(string("Group '", l,"'"))
+		for group in keys(gmx.x)
+			println(string("Group '", group,"'"))
 
-	        for j in 1:gmx.natoms[l]
+	        for atom in 1:gmx.natoms[group]
 				for k in 1:3
-					@printf "%12.6f" gmx.x[l][k,j,i] 
+					@printf "%12.6f" gmx.x[group][conf][k,atom]
 	            end
 				@printf "\n"
 			end
@@ -54,15 +54,15 @@ function output(gmx)
 		end
 
 		println("Box:")
-		@printf "%12.6f" gmx.box[1,1,i] 
-		@printf "%12.6f" gmx.box[2,2,i] 
-		@printf "%12.6f" gmx.box[3,3,i] 
-		@printf "%12.6f" gmx.box[1,2,i] 
-		@printf "%12.6f" gmx.box[1,3,i] 
-		@printf "%12.6f" gmx.box[2,1,i] 
-		@printf "%12.6f" gmx.box[2,3,i] 
-		@printf "%12.6f" gmx.box[3,1,i]
-		@printf "%12.6f\n" gmx.box[3,2,i]
+		@printf "%12.6f" gmx.box[conf][1,1] 
+		@printf "%12.6f" gmx.box[conf][2,2] 
+		@printf "%12.6f" gmx.box[conf][3,3] 
+		@printf "%12.6f" gmx.box[conf][1,2] 
+		@printf "%12.6f" gmx.box[conf][1,3] 
+		@printf "%12.6f" gmx.box[conf][2,1] 
+		@printf "%12.6f" gmx.box[conf][2,3] 
+		@printf "%12.6f" gmx.box[conf][3,1]
+		@printf "%12.6f\n" gmx.box[conf][3,2]
 
 	end
 
@@ -78,10 +78,10 @@ function main()
     last_frame = parsed_args["end"]
 	skip = parsed_args["skip"]
 
-    gmx = read_gmx(xtcfile,first_frame,last_frame,skip,ndxfile,"C","CH2")
+    gmx = read_gmx(xtcfile,first_frame,last_frame,skip,ndxfile,"C")
     #gmx = read_gmx(xtcfile,first_frame,last_frame,skip)
 
-	output(gmx)
+    output(gmx)
 
 end
 
