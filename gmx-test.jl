@@ -51,18 +51,18 @@ function output(gmx)
 				@printf "\n"
 			end
 
-			println("Box:")
-			@printf "%12.6f" gmx.box[1,1,i] 
-			@printf "%12.6f" gmx.box[2,2,i] 
-			@printf "%12.6f" gmx.box[3,3,i] 
-			@printf "%12.6f" gmx.box[1,2,i] 
-			@printf "%12.6f" gmx.box[1,3,i] 
-			@printf "%12.6f" gmx.box[2,1,i] 
-			@printf "%12.6f" gmx.box[2,3,i] 
-			@printf "%12.6f" gmx.box[3,1,i]
-			@printf "%12.6f\n" gmx.box[3,2,i]
-
 		end
+
+		println("Box:")
+		@printf "%12.6f" gmx.box[1,1,i] 
+		@printf "%12.6f" gmx.box[2,2,i] 
+		@printf "%12.6f" gmx.box[3,3,i] 
+		@printf "%12.6f" gmx.box[1,2,i] 
+		@printf "%12.6f" gmx.box[1,3,i] 
+		@printf "%12.6f" gmx.box[2,1,i] 
+		@printf "%12.6f" gmx.box[2,3,i] 
+		@printf "%12.6f" gmx.box[3,1,i]
+		@printf "%12.6f\n" gmx.box[3,2,i]
 
 	end
 
