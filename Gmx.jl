@@ -32,10 +32,11 @@ function save_xtc(gmx,CONF,xtc)
 end
 
 
-function read_gmx(xtc_file)
+function read_gmx(xtc_file,FIRST,LAST)
 
-    LAST = 1000
-    NO_CONFIGS = LAST
+    println("First frame to save: ", FIRST)
+    println("Last frame to save: ", LAST)
+    NO_CONFIGS = (LAST - FIRST + 1)
 
 	(STAT, xtc) = xtc_init(xtc_file)
 
@@ -45,14 +46,26 @@ function read_gmx(xtc_file)
         Array(Float32,(3,3,LAST)),
         Array(Float32,(3,int64(xtc.NATOMS),LAST)) )
 
-    for CONF = 1:LAST
+    # Skip frames until we get to the first frame to read in
+    for CONF = 1:(FIRST-1)
+
+		(STAT, xtc) = read_xtc(xtc)
+
+        if STAT != 0
+			break
+		end
+
+    end
+
+    # Read and save these frames
+    for CONF = FIRST:LAST
 
         println(CONF)
 
 		(STAT, xtc) = read_xtc(xtc)
 
         if STAT != 0
-            NO_CONFIGS = CONF
+            NO_CONFIGS = (CONF - FIRST + 1)
 			break
 		end
 		
@@ -60,6 +73,9 @@ function read_gmx(xtc_file)
 
     end 
 
+    println(string("Read in ", NO_CONFIGS, " frames."))
+
+    # Resize the arrays
     gmx = gmxType(
         NO_CONFIGS,
         Array(Float32,NO_CONFIGS),

@@ -12,6 +12,14 @@ function parse_commandline()
             help = "The input xtc file"
             arg_type = String
             default = "traj.xtc"
+        "--begin","-b"
+            help = "First frame to read in from xtc file"
+            arg_type = Int
+            default = 1
+        "--end","-e"
+            help = "Last frame to read in from xtc file"
+            arg_type = Int
+            default = 100000
     end
 
     return parse_args(s)
@@ -21,7 +29,13 @@ end
 function main()
 
     parsed_args = parse_commandline()
+
     xtcfile = parsed_args["file"]
-    gmx = read_gmx(xtcfile)
+    FIRST = parsed_args["begin"]
+    LAST = parsed_args["end"]
+
+    gmx = read_gmx(xtcfile,FIRST,LAST)
 
 end
+
+main()
