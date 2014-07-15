@@ -24,6 +24,10 @@ function parse_commandline()
             help = "Last frame to read in from xtc file"
             arg_type = Int
             default = 100000
+		"--skip","-s"
+            help = "Save only every nth frame."
+            arg_type = Int
+            default = 1
     end
 
     return parse_args(s)
@@ -47,6 +51,7 @@ function output(gmx)
 				@printf "\n"
 			end
 
+			println("Box:")
 			@printf "%12.6f" gmx.box[1,1,i] 
 			@printf "%12.6f" gmx.box[2,2,i] 
 			@printf "%12.6f" gmx.box[3,3,i] 
@@ -71,9 +76,10 @@ function main()
 	ndxfile = parsed_args["index"]
     first_frame = parsed_args["begin"]
     last_frame = parsed_args["end"]
+	skip = parsed_args["skip"]
 
-    #gmx = read_gmx(xtcfile,first_frame,last_frame,ndxfile,"C","CH2")
-    gmx = read_gmx(xtcfile,first_frame,last_frame)
+    gmx = read_gmx(xtcfile,first_frame,last_frame,skip,ndxfile,"C","CH2")
+    #gmx = read_gmx(xtcfile,first_frame,last_frame,skip)
 
 	output(gmx)
 

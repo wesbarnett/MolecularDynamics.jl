@@ -41,10 +41,18 @@ function save_xtc_ndx(gmx,conf,xtc,locs,group)
 end
 
 
-function read_gmx(xtc_file,first,last,ndx_file="0",group...)
+function read_gmx(xtc_file,first,last,skip,ndx_file="0",group...)
 
     println("First frame to save: ", first)
     println("Last frame to save: ", last)
+	if skip == 1
+		println("Saving every frame.")
+	elseif skip == 2
+		println("Saving every other frame.")
+	else
+		println("Saving every ",skip,"th frame.")
+	end
+
     no_configs = (last - first)
 
 	(stat, xtc) = xtc_init(xtc_file)
@@ -85,14 +93,15 @@ function read_gmx(xtc_file,first,last,ndx_file="0",group...)
 			x_dict[group[i]] = Array(Float32,(3,natoms,last))
 		end
 
-	    gmx_tmp = gmxType(
-	        last,
-	        Array(Float32,last),
-	        Array(Float32,(3,3,last)),
-			x_dict,
-		 	natoms_dict)
-
 	end
+
+	gmx_tmp = gmxType(
+	    last,
+	    Array(Float32,last),
+	    Array(Float32,(3,3,last)),
+		x_dict,
+	 	natoms_dict)
+
 
     # Skip frames until we get to the first frame to read in
     for conf = 1:(first-1)
@@ -106,22 +115,26 @@ function read_gmx(xtc_file,first,last,ndx_file="0",group...)
     end
 
     # Read and save these frames
+	save_frame = 1
     for conf = first:last
 
 		# TODO: add output counter
 		(stat, xtc) = read_xtc(xtc)
 
         if stat != 0
-            no_configs = (conf - first)
+            no_configs = int( (conf - first) / skip )
 			break
 		end
 		
-		if ndx_file == "0"
-			save_xtc(gmx_tmp,conf,xtc)
-		else
-			for grp in 1:no_groups
-				save_xtc_ndx(gmx_tmp,conf,xtc,ndx_dict[group[grp]],group[grp])
+		if conf % skip == 0
+			if ndx_file == "0"
+				save_xtc(gmx_tmp,save_frame,xtc)
+			else
+				for grp in 1:no_groups
+					save_xtc_ndx(gmx_tmp,save_frame,xtc,ndx_dict[group[grp]],group[grp])
+				end
 			end
+			save_frame += 1
 		end
 
     end 
