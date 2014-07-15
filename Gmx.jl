@@ -11,7 +11,7 @@ type gmxType
 	time
 	box
     x
-	natoms
+ 	natoms
 end
 
 type gmxGroup
@@ -31,11 +31,12 @@ function save_xtc(gmx,conf,xtc)
 
 end
 
-function save_xtc_ndx(gmx,conf,xtc,locs)
+function save_xtc_ndx(gmx,conf,xtc,locs,group)
 
     gmx.time[conf] = xtc.time[]
     gmx.box[:,:,conf] = xtc.box[:,:]
-	gmx.x[:,:,conf] = xtc.x[:,locs]
+
+	gmx.x[group][:,:,conf] = xtc.x[:,locs]
 
 end
 
@@ -49,46 +50,40 @@ function read_gmx(xtc_file,first,last,ndx_file="0",group...)
 	(stat, xtc) = xtc_init(xtc_file)
 
 	# if no index file is specified
-
 	if ndx_file=="0"
-
-
+  
 	    gmx_tmp = gmxType(
 	        last,
 			Array(Float32,last),
 			Array(Float32,(3,3,last)),
 			Array(Float32,(3,int64(xtc.natoms),last)),
 			xtc.natoms )
-
+  
 	# if an index file is specified
 	else
 
 		ndx_dict = read_ndx(ndx_file)
+		natoms_dict = Dict()
+		x_dict = Dict()
 
 		no_groups = size(group,1)
+
+		# Create dictionary containing number of atoms for each group
+		for i in 1:no_groups
+			natoms = size(ndx_dict[group[i]],1)
+			natoms_dict[group[i]] = natoms
+			x_dict[group[i]] = Array(Float32,(3,natoms,last))
+		end
+
 	    gmx_tmp = gmxType(
 	        last,
 	        Array(Float32,last),
 	        Array(Float32,(3,3,last)),
-	        Array(Float32,(3,size(ndx_dict[group[1]],1),last)),
-			xtc.natoms)
+			x_dict,
+	        #Array(Float32,(3,size(ndx_dict[group[1]],1),last)),
+		 	natoms_dict)
+
 	end
-
-#=
-	gmx_groups = gmxGroup(
-		Array(Float32,(0,0,0)),
-		0)[no_groups]
-
-	for i in 1:size(group,1)
-		natoms = size(ndx_dict[group[i]],1)
-		println(natoms)
-		gmx_group_tmp = gmxGroup(
-			Array(Float32,(3,natoms,last)),
-			natoms )
-		append!(gmx_groups,gmx_group_tmp)
-	end
-=#
-
 
     # Skip frames until we get to the first frame to read in
     for conf = 1:(first-1)
@@ -112,11 +107,13 @@ function read_gmx(xtc_file,first,last,ndx_file="0",group...)
 			break
 		end
 		
-		if ndx_file == "0"
-			save_xtc(gmx_tmp,conf,xtc)
-		else
-			save_xtc_ndx(gmx_tmp,conf,xtc,ndx_dict[group[1]])
-		end
+#	if ndx_file == "0"
+#		save_xtc(gmx_tmp,conf,xtc)
+#	else
+			for grp in 1:no_groups
+				save_xtc_ndx(gmx_tmp,conf,xtc,ndx_dict[group[grp]],group[grp])
+			end
+#	end
 
     end 
 
@@ -145,15 +142,17 @@ function read_gmx(xtc_file,first,last,ndx_file="0",group...)
 			no_configs,
 			Array(Float32,no_configs),
 			Array(Float32,(3,3,no_configs)),
-			Array(Float32,(3,size(ndx_dict[group[1]],1),no_configs)),
-			xtc.natoms )
+			x_dict,
+			natoms_dict )
 
 		gmx.no_configs = no_configs
 	    gmx.time = gmx_tmp.time[1:no_configs]
 		gmx.box = gmx_tmp.box[:,:,1:no_configs]
 
-		gmx.x = gmx_tmp.x[:,:,1:no_configs]
-		gmx.natoms = size(ndx_dict[group[1]],1)
+		for i in group
+			gmx.x[i] = gmx_tmp.x[i][:,:,1:no_configs]
+		end
+		gmx.natoms = gmx_tmp.natoms
 
 	end
 	

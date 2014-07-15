@@ -35,26 +35,31 @@ function output(gmx)
      for i in 1:gmx.no_configs 
 
 	 	println(string("Time (ps): ", gmx.time[i]))
+		println("Coordinates: ")
 
-	 	println("Coordinates: ")
-        for j in 1:gmx.natoms
-            for k in 1:3
-                @printf "%12.6f" gmx.x[k,j,i] 
-            end
-            @printf "\n"
-        end
+		for l in keys(gmx.x)
+			println(l)
 
-        @printf "%12.6f" gmx.box[1,1] 
-        @printf "%12.6f" gmx.box[2,2] 
-        @printf "%12.6f" gmx.box[3,3] 
-        @printf "%12.6f" gmx.box[1,2] 
-        @printf "%12.6f" gmx.box[1,3] 
-        @printf "%12.6f" gmx.box[2,1] 
-        @printf "%12.6f" gmx.box[2,3] 
-        @printf "%12.6f" gmx.box[3,1]
-        @printf "%12.6f\n" gmx.box[3,2]
+	        for j in 1:gmx.natoms[l]
+				for k in 1:3
+					@printf "%12.6f" gmx.x[l][k,j,i] 
+	            end
+				@printf "\n"
+			end
 
-     end
+			@printf "%12.6f" gmx.box[1,1] 
+			@printf "%12.6f" gmx.box[2,2] 
+			@printf "%12.6f" gmx.box[3,3] 
+			@printf "%12.6f" gmx.box[1,2] 
+			@printf "%12.6f" gmx.box[1,3] 
+			@printf "%12.6f" gmx.box[2,1] 
+			@printf "%12.6f" gmx.box[2,3] 
+			@printf "%12.6f" gmx.box[3,1]
+			@printf "%12.6f\n" gmx.box[3,2]
+
+		end
+
+	end
 
 end
 
@@ -68,7 +73,6 @@ function main()
     last_frame = parsed_args["end"]
 
     gmx = read_gmx(xtcfile,first_frame,last_frame,ndxfile,"C")
-    gmx = read_gmx(xtcfile,first_frame,last_frame)
 
 	output(gmx)
 
