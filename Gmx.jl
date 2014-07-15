@@ -76,6 +76,3 @@ function read_gmx(xtc_file)
 end
 
 end
-
-import Gmx: read_gmx
-gmx = read_gmx("traj.xtc")

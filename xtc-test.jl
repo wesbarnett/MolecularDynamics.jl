@@ -1,15 +1,15 @@
 # Read in an print out xtc file contents
 
 import Xtc: xtc_init, read_xtc, close_xtc
-require("argparse")
 using ArgParse
 
 function parse_commandline()
-    s = ArgParseSettings()
+
+    s = ArgParseSettings(description = "Sample program that reads in xtc files.")
 
     @add_arg_table s begin
-        "-f","--file"
-            help = "The input file"
+        "--file","-f"
+            help = "The input xtc file"
             arg_type = String
             default = "traj.xtc"
     end
@@ -23,7 +23,9 @@ function main()
 
     parsed_args = parse_commandline()
 
-    (STAT, xtc) = xtc_init("traj.xtc")
+    xtcfile = parsed_args["file"]
+
+    (STAT, xtc) = xtc_init(xtcfile)
 
      while (STAT == 0) 
 
