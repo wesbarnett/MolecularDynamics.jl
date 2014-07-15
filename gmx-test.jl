@@ -38,7 +38,7 @@ function output(gmx)
 		println("Coordinates: ")
 
 		for l in keys(gmx.x)
-			println(l)
+			println(string("Group '", l,"'"))
 
 	        for j in 1:gmx.natoms[l]
 				for k in 1:3
@@ -47,15 +47,15 @@ function output(gmx)
 				@printf "\n"
 			end
 
-			@printf "%12.6f" gmx.box[1,1] 
-			@printf "%12.6f" gmx.box[2,2] 
-			@printf "%12.6f" gmx.box[3,3] 
-			@printf "%12.6f" gmx.box[1,2] 
-			@printf "%12.6f" gmx.box[1,3] 
-			@printf "%12.6f" gmx.box[2,1] 
-			@printf "%12.6f" gmx.box[2,3] 
-			@printf "%12.6f" gmx.box[3,1]
-			@printf "%12.6f\n" gmx.box[3,2]
+			@printf "%12.6f" gmx.box[1,1,i] 
+			@printf "%12.6f" gmx.box[2,2,i] 
+			@printf "%12.6f" gmx.box[3,3,i] 
+			@printf "%12.6f" gmx.box[1,2,i] 
+			@printf "%12.6f" gmx.box[1,3,i] 
+			@printf "%12.6f" gmx.box[2,1,i] 
+			@printf "%12.6f" gmx.box[2,3,i] 
+			@printf "%12.6f" gmx.box[3,1,i]
+			@printf "%12.6f\n" gmx.box[3,2,i]
 
 		end
 
@@ -72,7 +72,7 @@ function main()
     first_frame = parsed_args["begin"]
     last_frame = parsed_args["end"]
 
-    gmx = read_gmx(xtcfile,first_frame,last_frame,ndxfile,"C")
+    gmx = read_gmx(xtcfile,first_frame,last_frame,ndxfile,"C","CH2")
 
 	output(gmx)
 
