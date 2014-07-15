@@ -67,7 +67,8 @@ function main()
     first_frame = parsed_args["begin"]
     last_frame = parsed_args["end"]
 
-    gmx = read_gmx(xtcfile,ndxfile,first_frame,last_frame,"C","CH2")
+    gmx = read_gmx(xtcfile,first_frame,last_frame,ndxfile,"C")
+    gmx = read_gmx(xtcfile,first_frame,last_frame)
 
 	output(gmx)
 
