@@ -7,8 +7,8 @@ module Xtc
 export xtc_init, read_xtc, close_xtc, read_gmx
 
 type xtcType
-    NATOMS
-    STEP
+    natoms
+    step
     time
     box
     x
@@ -26,13 +26,13 @@ function xtc_init(xtcfile)
     end
 
     # Get number of atoms in system
-    NATOMS = Cint[0]
-    STAT = ccall( (:read_xtc_natoms,"libxdrfile"), Int32, (Ptr{Uint8},
-        Ptr{Cint}), xtcfile, NATOMS)
-    println(string("No. of atoms = ", NATOMS[]))
+    natoms = Cint[0]
+    stat = ccall( (:read_xtc_natoms,"libxdrfile"), Int32, (Ptr{Uint8},
+        Ptr{Cint}), xtcfile, natoms)
+    println(string("No. of atoms = ", natoms[]))
 
     # Check if we actually did open the file
-    if (STAT != 0)
+    if (stat != 0)
         error(string("Failure in opening ", xtcfile))
     end
 
@@ -42,37 +42,37 @@ function xtc_init(xtcfile)
 
     # Assign everything to this type
     xtc = xtcType(
-        NATOMS[],
+        natoms[],
         Cint[0],
         Cfloat[0],
         Array(Cfloat,(3,3)),
-        Array(Cfloat,(3,int64(NATOMS[]))),
+        Array(Cfloat,(3,int64(natoms[]))),
         Cfloat[0],
         xd)
 
-    return STAT, xtc
+    return stat, xtc
 
 end
 
 function read_xtc(xtc)
 
-    STAT = ccall( (:read_xtc,"libxdrfile"), Int32, ( Ptr{Void}, Ptr{Cint},
+    stat = ccall( (:read_xtc,"libxdrfile"), Int32, ( Ptr{Void}, Ptr{Cint},
         Ptr{Cint}, Ptr{Cfloat}, Ptr{Cfloat}, Ptr{Cfloat}, Ptr{Cfloat} ), xtc.xd,
-        xtc.NATOMS, xtc.STEP, xtc.time, xtc.box, xtc.x, xtc.prec) 
+        xtc.natoms, xtc.step, xtc.time, xtc.box, xtc.x, xtc.prec) 
 
-    if (STAT != 0 | STAT != 11)
+    if (stat != 0 | stat != 11)
         error("Failure in reading xtc frame.")
     end
 
-	return STAT, xtc
+	return stat, xtc
 
 end
 
 function close_xtc(xtc)
 
-    STAT = ccall( (:xdrfile_close,"libxdrfile"), Int32, ( Ptr{Void}, ), xtc.xd)
+    stat = ccall( (:xdrfile_close,"libxdrfile"), Int32, ( Ptr{Void}, ), xtc.xd)
 
-	return STAT
+	return stat
 
 end
 

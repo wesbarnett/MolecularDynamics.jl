@@ -2,90 +2,109 @@
 module Gmx
 
 import Xtc: xtc_init, read_xtc, close_xtc
+import Ndx: read_ndx
 
 export read_gmx
 
 type gmxType
-	NO_CONFIGS
+	no_configs
 	time
 	box
     x
+	natoms
 end
 
 type gmxGroup
-	LOC
+	loc
 	title
 	x
-	NATOMS
+	natoms
 end
 
 #=  TODO: read in command line arguments (beginning, end, skip, xtc file).
     Also, be able to read in index file (how to do groups?)
 =#
 
-function save_xtc(gmx,CONF,xtc)
+function save_xtc(gmx,conf,xtc,locs)
 
-    gmx.time[CONF] = xtc.time[]
-    gmx.box[:,:,CONF] = xtc.box[:,:]
-    gmx.x[:,:,CONF] = xtc.x[:,:]
+    gmx.time[conf] = xtc.time[]
+    gmx.box[:,:,conf] = xtc.box[:,:]
+	gmx.x[:,:,conf] = xtc.x[:,locs]
 
 end
 
 
-function read_gmx(xtc_file,FIRST,LAST)
+function read_gmx(xtc_file,ndx_file,first,last,group...)
 
-    println("First frame to save: ", FIRST)
-    println("Last frame to save: ", LAST)
-    NO_CONFIGS = (LAST - FIRST + 1)
+    println("First frame to save: ", first)
+    println("Last frame to save: ", last)
+    no_configs = (last - first)
 
-	(STAT, xtc) = xtc_init(xtc_file)
+	(stat, xtc) = xtc_init(xtc_file)
+	ndx_dict = read_ndx(ndx_file)
 
+	# TODO: make index file optional
+	# if no index file is specified
+	#=
     gmx_tmp = gmxType(
-        LAST,
-        Array(Float32,LAST),
-        Array(Float32,(3,3,LAST)),
-        Array(Float32,(3,int64(xtc.NATOMS),LAST)) )
+        last,
+        Array(Float32,last),
+        Array(Float32,(3,3,last)),
+        Array(Float32,(3,int64(xtc.natoms),last)) )
+	=#
+
+	# if an index file is specified
+    gmx_tmp = gmxType(
+        last,
+        Array(Float32,last),
+        Array(Float32,(3,3,last)),
+        Array(Float32,(3,size(ndx_dict[group[1]],1),last)),
+		xtc.natoms)
 
     # Skip frames until we get to the first frame to read in
-    for CONF = 1:(FIRST-1)
+    for conf = 1:(first-1)
 
-		(STAT, xtc) = read_xtc(xtc)
+		(stat, xtc) = read_xtc(xtc)
 
-        if STAT != 0
+        if stat != 0
 			break
 		end
 
     end
 
     # Read and save these frames
-    for CONF = FIRST:LAST
+    for conf = first:last
 
-        println(CONF)
+		# TODO: add output counter
+		(stat, xtc) = read_xtc(xtc)
 
-		(STAT, xtc) = read_xtc(xtc)
-
-        if STAT != 0
-            NO_CONFIGS = (CONF - FIRST + 1)
+        if stat != 0
+            no_configs = (conf - first)
 			break
 		end
 		
-		save_xtc(gmx_tmp,CONF,xtc)
+		save_xtc(gmx_tmp,conf,xtc,ndx_dict[group[1]])
 
     end 
 
-    println(string("Read in ", NO_CONFIGS, " frames."))
+    println(string("Read in ", no_configs, " frames."))
 
     # Resize the arrays
     gmx = gmxType(
-        NO_CONFIGS,
-        Array(Float32,NO_CONFIGS),
-        Array(Float32,(3,3,NO_CONFIGS)),
-        Array(Float32,(3,int64(xtc.NATOMS),NO_CONFIGS)) )
+        no_configs,
+        Array(Float32,no_configs),
+        Array(Float32,(3,3,no_configs)),
+        Array(Float32,(3,size(ndx_dict[group[1]],1),no_configs)),
+		xtc.natoms )
 
-    gmx.NO_CONFIGS = NO_CONFIGS
-    gmx.time = gmx_tmp.time[1:NO_CONFIGS]
-    gmx.box = gmx_tmp.box[:,:,1:NO_CONFIGS]
-    gmx.x = gmx_tmp.x[:,:,NO_CONFIGS]
+    gmx.no_configs = no_configs
+    gmx.time = gmx_tmp.time[1:no_configs]
+    gmx.box = gmx_tmp.box[:,:,1:no_configs]
+
+    gmx.x = gmx_tmp.x[:,:,1:no_configs]
+	gmx.natoms = size(ndx_dict[group[1]],1)
+
+	println(gmx.x[:,1,1])
 
     return gmx
 

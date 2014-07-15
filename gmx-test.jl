@@ -12,6 +12,10 @@ function parse_commandline()
             help = "The input xtc file"
             arg_type = String
             default = "traj.xtc"
+		"--index","-n"
+            help = "The index file"
+            arg_type = String
+            default = "index.ndx"
         "--begin","-b"
             help = "First frame to read in from xtc file"
             arg_type = Int
@@ -26,15 +30,46 @@ function parse_commandline()
 
 end
 
+function output(gmx)
+
+     for i in 1:gmx.no_configs 
+
+	 	println(string("Time (ps): ", gmx.time[i]))
+
+	 	println("Coordinates: ")
+        for j in 1:gmx.natoms
+            for k in 1:3
+                @printf "%12.6f" gmx.x[k,j,i] 
+            end
+            @printf "\n"
+        end
+
+        @printf "%12.6f" gmx.box[1,1] 
+        @printf "%12.6f" gmx.box[2,2] 
+        @printf "%12.6f" gmx.box[3,3] 
+        @printf "%12.6f" gmx.box[1,2] 
+        @printf "%12.6f" gmx.box[1,3] 
+        @printf "%12.6f" gmx.box[2,1] 
+        @printf "%12.6f" gmx.box[2,3] 
+        @printf "%12.6f" gmx.box[3,1]
+        @printf "%12.6f\n" gmx.box[3,2]
+
+     end
+
+end
+
 function main()
 
     parsed_args = parse_commandline()
 
     xtcfile = parsed_args["file"]
-    FIRST = parsed_args["begin"]
-    LAST = parsed_args["end"]
+	ndxfile = parsed_args["index"]
+    first_frame = parsed_args["begin"]
+    last_frame = parsed_args["end"]
 
-    gmx = read_gmx(xtcfile,FIRST,LAST)
+    gmx = read_gmx(xtcfile,ndxfile,first_frame,last_frame,"C","CH2")
+
+	output(gmx)
 
 end
 
