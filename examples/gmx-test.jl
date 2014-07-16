@@ -3,6 +3,12 @@
 # Test program to show how an xtc file and ndx file can be read in using
 # "read_gmx".
 
+# ArgParse is required so you'll need to add that with the package manager:
+#   Pkg.add("ArgParse")
+# You'll also need to make sure the Gmx module is in your module path. You can
+# the directory containing this module to the JULIA_LOAD_PATH environmental
+# variable.
+
 import Gmx: read_gmx
 
 using ArgParse
