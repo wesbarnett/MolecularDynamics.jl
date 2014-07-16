@@ -1,3 +1,7 @@
+# James W. Barnett
+# jbarnet4@tulane.edu
+# Test program to show how an xtc file and ndx file can be read in using
+# "read_gmx".
 
 import Gmx: read_gmx
 
@@ -78,7 +82,15 @@ function main()
     last_frame = parsed_args["end"]
 	skip = parsed_args["skip"]
 
+    # read_gmx can be used with or without an ndxfile
+
+    # With an index file with one group
     gmx = read_gmx(xtcfile,first_frame,last_frame,skip,ndxfile,"C")
+
+    # With an index file with multiple groups
+    #gmx = read_gmx(xtcfile,first_frame,last_frame,skip,ndxfile,"C","CH2")
+
+    # No index file
     #gmx = read_gmx(xtcfile,first_frame,last_frame,skip)
 
     output(gmx)
