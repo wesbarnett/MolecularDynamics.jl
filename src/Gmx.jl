@@ -165,8 +165,7 @@ function read_gmx(xtc_file,first,last,skip,ndx_file="0",group...)
 
     end 
 
-	println()
-    println(string("Read in ", no_frames, " frames."))
+    println(char(13),"Read in ", no_frames, " frames.")
 
     # Resize the arrays
 

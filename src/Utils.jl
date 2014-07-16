@@ -11,9 +11,9 @@ export pbc
 # vector (the position) and the box ( 3 x 3 Array). A 3d vector is returned.
 function pbc(a,box) 
 
-    b = Array(Float32,3)
-	box_inv = Array(Float32,3)
-	shift = Float32
+    b = Array(Float64,3)
+	box_inv = Array(Float64,3)
+	shift = Float64
 
     box_inv[1] = 1.0/box[1,1]
     box_inv[2] = 1.0/box[2,2]
