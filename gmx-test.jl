@@ -36,9 +36,9 @@ end
 
 function output(gmx)
 
-     for conf in 1:gmx.no_configs 
+     for frame in 1:gmx.no_frames 
 
-	 	println(string("Time (ps): ", gmx.time[conf]))
+	 	println(string("Time (ps): ", gmx.time[frame]))
 		println("Coordinates: ")
 
 		for group in keys(gmx.x)
@@ -46,7 +46,7 @@ function output(gmx)
 
 	        for atom in 1:gmx.natoms[group]
 				for k in 1:3
-					@printf "%12.6f" gmx.x[group][conf][k,atom]
+					@printf "%12.6f" gmx.x[group][frame][k,atom]
 	            end
 				@printf "\n"
 			end
@@ -54,15 +54,15 @@ function output(gmx)
 		end
 
 		println("Box:")
-		@printf "%12.6f" gmx.box[conf][1,1] 
-		@printf "%12.6f" gmx.box[conf][2,2] 
-		@printf "%12.6f" gmx.box[conf][3,3] 
-		@printf "%12.6f" gmx.box[conf][1,2] 
-		@printf "%12.6f" gmx.box[conf][1,3] 
-		@printf "%12.6f" gmx.box[conf][2,1] 
-		@printf "%12.6f" gmx.box[conf][2,3] 
-		@printf "%12.6f" gmx.box[conf][3,1]
-		@printf "%12.6f\n" gmx.box[conf][3,2]
+		@printf "%12.6f" gmx.box[frame][1,1] 
+		@printf "%12.6f" gmx.box[frame][2,2] 
+		@printf "%12.6f" gmx.box[frame][3,3] 
+		@printf "%12.6f" gmx.box[frame][1,2] 
+		@printf "%12.6f" gmx.box[frame][1,3] 
+		@printf "%12.6f" gmx.box[frame][2,1] 
+		@printf "%12.6f" gmx.box[frame][2,3] 
+		@printf "%12.6f" gmx.box[frame][3,1]
+		@printf "%12.6f\n" gmx.box[frame][3,2]
 
 	end
 

@@ -1,4 +1,7 @@
+# James W. Barnett (c) 2014
+# jbarnet4@tulane.edu
 # Module for reading in xtc file with libxdrfile
+
 module Gmx
 
 import Xtc: xtc_init, read_xtc, close_xtc
@@ -6,32 +9,47 @@ import Ndx: read_ndx
 
 export read_gmx
 
+#=	gmxType is what is returned at the end of running "read_gmx"
+	The variable "gmx" of gmxType is defined in "read_gmx" 
+	and all the arrays are initialized there.
+
+	no_frames	-	number of frames that were read in
+                    note that time zero starts at frame 1 !!	
+	time		-   the time at the current frame
+					accessed by "gmx.time[frame]"
+	box			-	the box of the current frame with dimensions 3 x 3
+					accessed by "gmx.box[frame]"
+	x			-   the cartesian coordinates of the atoms which were read in
+					accessed by "gmx.x["Group"][frame][:,atom]"
+					"Group" is the name of the index group from the index file, or
+					it is "all" if no index file was specified.
+	natoms		-   the number of atoms in each group
+					accessed by "gmx.natoms["Group"]
+=#
+
 type gmxType
-	no_configs
+	no_frames
 	time
 	box
     x
  	natoms
 end
 
-#=  TODO: Comments
-=#
+function save_xtc_frame(gmx,frame,xtc)
 
-function save_xtc(gmx,conf,xtc)
-
-    gmx.time[conf] = xtc.time[]
-    gmx.box[conf] = xtc.box[1:3,1:3]
-	gmx.x["all"][conf] = xtc.x
+    gmx.time[frame] = xtc.time[]
+    gmx.box[frame] = xtc.box[1:3,1:3]
+	gmx.x["all"][frame] = xtc.x
 
 	return gmx
 
 end
 
-function save_xtc_ndx(gmx,conf,xtc,locs,group)
+function save_xtc_frame_ndx(gmx,frame,xtc,locs,group)
 
-    gmx.time[conf] = xtc.time[]
-    gmx.box[conf] = xtc.box[1:3,1:3]
-	gmx.x[group][conf] = xtc.x[1:3,locs]
+    gmx.time[frame] = xtc.time[]
+    gmx.box[frame] = xtc.box[1:3,1:3]
+	gmx.x[group][frame] = xtc.x[1:3,locs]
 
 	return gmx
 end
@@ -49,7 +67,7 @@ function read_gmx(xtc_file,first,last,skip,ndx_file="0",group...)
 		println("Saving every ",skip,"th frame.")
 	end
 
-    no_configs = (last - first)
+    no_frames = (last - first)
 
 	(stat, xtc) = xtc_init(xtc_file)
 
@@ -67,14 +85,16 @@ function read_gmx(xtc_file,first,last,skip,ndx_file="0",group...)
 		# We use a dictionary for the natoms and coordinates even though
 		# we know there will be only one key. This is to remain consistent
 		# if we were to have multiple groups
+
 		natoms_dict["all"] = xtc.natoms
 		#x_vec_tmp = Array(Float32,3)
 		#x_atom_array_tmp = Array(Any,int64(xtc.natoms))
 		#fill!(x_atom_array_tmp,x_vec_tmp)
+
 		x_atom_array_tmp = Array(Float32,(3,int64(xtc.natoms)))
-		x_conf_array_tmp = Array(Any,last)
-		fill!(x_conf_array_tmp,x_atom_array_tmp)
-		x_dict_tmp["all"] = x_conf_array_tmp
+		x_frame_array_tmp = Array(Any,last)
+		fill!(x_frame_array_tmp,x_atom_array_tmp)
+		x_dict_tmp["all"] = x_frame_array_tmp
   
 	# if an index file is specified
 	else
@@ -90,9 +110,9 @@ function read_gmx(xtc_file,first,last,skip,ndx_file="0",group...)
 			#x_atom_array_tmp = Array(Any,int64(natoms))
 			#fill!(x_atom_array_tmp,x_vec_tmp)
 			x_atom_array_tmp = Array(Float32,(3,int64(natoms)))
-			x_conf_array_tmp = Array(Any,last)
-			fill!(x_conf_array_tmp,x_atom_array_tmp)
-			x_dict_tmp[i] = x_conf_array_tmp
+			x_frame_array_tmp = Array(Any,last)
+			fill!(x_frame_array_tmp,x_atom_array_tmp)
+			x_dict_tmp[i] = x_frame_array_tmp
 		end
 
 	end
@@ -110,7 +130,7 @@ function read_gmx(xtc_file,first,last,skip,ndx_file="0",group...)
 
 
     # Skip frames until we get to the first frame to read in
-    for conf = 1:(first-1)
+    for frame = 1:(first-1)
 
 		(stat, xtc) = read_xtc(xtc)
 
@@ -122,22 +142,22 @@ function read_gmx(xtc_file,first,last,skip,ndx_file="0",group...)
 
     # Read and save these frames
 	save_frame = 1
-    for conf = first:last
+    for frame = first:last
 
-		#print(char(13),"Reading frame: ",conf)
+		print(char(13),"Reading frame: ",frame)
 		(stat, xtc) = read_xtc(xtc)
 
         if stat != 0
-            no_configs = int( (conf - first) / skip )
+            no_frames = int( (frame - first) / skip )
 			break
 		end
 		
-		if conf % skip == 0
+		if frame % skip == 0
 			if ndx_file == "0"
-				gmx_tmp = save_xtc(gmx_tmp,save_frame,xtc)
+				gmx_tmp = save_xtc_frame(gmx_tmp,save_frame,xtc)
 			else
 				for grp in 1:no_groups
-					gmx_tmp = save_xtc_ndx(gmx_tmp,save_frame,xtc,ndx_dict[group[grp]],group[grp])
+					gmx_tmp = save_xtc_frame_ndx(gmx_tmp,save_frame,xtc,ndx_dict[group[grp]],group[grp])
 				end
 			end
 			save_frame += 1
@@ -146,12 +166,12 @@ function read_gmx(xtc_file,first,last,skip,ndx_file="0",group...)
     end 
 
 	println()
-    println(string("Read in ", no_configs, " frames."))
+    println(string("Read in ", no_frames, " frames."))
 
     # Resize the arrays
 
     box = Array(Float32,(3,3))
-    box_array = Array(Any,no_configs)
+    box_array = Array(Any,no_frames)
     fill!(box_array,box)
 
 	if ndx_file == "0"
@@ -159,9 +179,9 @@ function read_gmx(xtc_file,first,last,skip,ndx_file="0",group...)
 		x_vec = Array(Float32,3)
 		x_atom_array = Array(Any,int64(xtc.natoms))
 		fill!(x_atom_array,x_vec)
-		x_conf_array = Array(Any,no_configs)
-		fill!(x_conf_array,x_atom_array)
-		x_dict["all"] = x_conf_array
+		x_frame_array = Array(Any,no_frames)
+		fill!(x_frame_array,x_atom_array)
+		x_dict["all"] = x_frame_array
 
 	else
 
@@ -171,28 +191,28 @@ function read_gmx(xtc_file,first,last,skip,ndx_file="0",group...)
 			#x_atom_array = Array(Any,int64(gmx_tmp.natoms[i]))
 			#fill!(x_atom_array,x_vec)
 			x_atom_array = Array(Float32,(3,int64(gmx_tmp.natoms[i])))
-			x_conf_array = Array(Any,no_configs)
-			fill!(x_conf_array,x_atom_array)
-			x_dict[i] = x_conf_array
+			x_frame_array = Array(Any,no_frames)
+			fill!(x_frame_array,x_atom_array)
+			x_dict[i] = x_frame_array
 
 		end
 
 	end
 
 	gmx = gmxType(
-		no_configs,
-		Array(Float32,no_configs),
+		no_frames,
+		Array(Float32,no_frames),
 		box_array,
 		x_dict,
 		natoms_dict )
 
-	gmx.no_configs = no_configs
-    gmx.time = gmx_tmp.time[1:no_configs]
-	gmx.box[:] = gmx_tmp.box[1:no_configs]
+	gmx.no_frames = no_frameigs
+    gmx.time = gmx_tmp.time[1:no_frames]
+	gmx.box[:] = gmx_tmp.box[1:no_frames]
 	gmx.natoms = gmx_tmp.natoms
 
 	for i in group
-		gmx.x[i] = gmx_tmp.x[i][1:no_configs]
+		gmx.x[i] = gmx_tmp.x[i][1:no_frames]
 	end
 	
     return gmx
