@@ -52,6 +52,14 @@ function parse_commandline()
             help = "Plot output file."
             arg_type = String
             default = "plot.svg"
+		"--group1","--g1"
+			help = "The name of index group 1."
+			arg_type = String
+			default = "C"
+		"--group2","--g2"
+			help = "The name of index group 2."
+			arg_type = String
+			default = "OW"
     end
 
     return parse_args(s)
@@ -77,13 +85,10 @@ function normalize(g,gmx,nbins,bin_width,group1,group2)
     bin_vols = zeros(Float64, nbins)
     for i in 1:nbins
         r = float(i)  + 0.5
-        bin_vols[i] = r^3 - (r-1.0)^3
-        bin_vols[i] *= 4.0/3.0 * pi * (bin_width)^3 
-    end
-
-    # TODO: only works if we have a constant volume with a cubic box
-    for i in 1:nbins
-        g[i] *= float64(gmx.box[1][1,1] * gmx.box[1][2,2] * gmx.box[1][3,3]) / ( gmx.natoms[group1] * gmx.natoms[group2] * bin_vols[i] * gmx.no_frames) 
+        bin_vol = r^3 - (r-1.0)^3
+        bin_vol *= 4.0/3.0 * pi * (bin_width)^3 
+		# TODO: only works if we have a constant volume with a cubic box
+        g[i] *= float64(gmx.box[1][1,1] * gmx.box[1][2,2] * gmx.box[1][3,3]) / ( gmx.natoms[group1] * gmx.natoms[group2] * bin_vol * gmx.no_frames) 
     end
 
 end
@@ -146,12 +151,10 @@ function main()
     r_excl = parsed_args["r-excl"]
     plotfile = parsed_args["plotfile"]
     outfile = parsed_args["outfile"]
+    group1 = parsed_args["group1"]
+    group2 = parsed_args["group2"]
     
-
     r_excl2 = r_excl^2
-
-    group1 = "C"
-    group2 = "OW"
 
     gmx = read_gmx(xtcfile,first_frame,last_frame,skip,ndxfile,group1,group2)
 
