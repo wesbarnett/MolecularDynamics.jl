@@ -102,7 +102,9 @@ function do_binning(g,gmx,nbins,bin_width,r_excl2,group1,group2)
 
     for frame in 1:gmx.no_frames
 
-		print(char(13),"Binning frame: ",frame)
+        if frame % 1000 == 0
+		    print(char(13),"Binning frame: ",frame)
+        end
 
         for i in 1:gmx.natoms[group1]
 

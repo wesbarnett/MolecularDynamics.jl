@@ -144,7 +144,10 @@ function read_gmx(xtc_file,first,last,skip,ndx_file="0",group...)
 	save_frame = 1
     for frame = first:last
 
-		print(char(13),"Reading frame: ",frame)
+		if frame % 1000 == 0
+			print(char(13),"Reading frame: ",frame)
+		end
+
 		(stat, xtc) = read_xtc(xtc)
 
         if stat != 0
