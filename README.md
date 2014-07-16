@@ -10,7 +10,10 @@ Julia language. Several modules are includes.
 *  Ndx - read in ndx files.
 *  Utils - some misc. functions (for now).
 
-You should check out the examples folder for more information.
+You should check out the examples folder for more information. Specifically
+check out "gmx-test" which uses the Gmx module to read in an xtc file and
+outputs all of the info stored in the arrays. An example xtc file and its
+corresponding gro file are in the folder as a quick comparison.
 
 Note that this is a work in progress and probably contains many bugs. 
 
