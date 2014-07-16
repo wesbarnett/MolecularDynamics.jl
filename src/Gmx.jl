@@ -39,7 +39,7 @@ function save_xtc_frame(gmx,frame,xtc)
 
     gmx.time[frame] = xtc.time[]
     gmx.box[frame] = xtc.box[1:3,1:3]
-	gmx.x["all"][frame] = xtc.x
+	gmx.x["all"][frame] = xtc.x[1:3,:]
 
 	return gmx
 
