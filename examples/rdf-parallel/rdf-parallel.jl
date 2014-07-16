@@ -2,7 +2,8 @@
 # jbarnet4@tulane.edu
 # Creates a radial distribution function given two groups (in this case "C" and
 # "OW", which can be changed by the user in the main function. Note that this
-# program only works with a constant volume system and with a box that is cubic.
+# program only works with a constant volume system and with a box that is
+# cubic. This version does the binning part in parallel.
 
 import Gmx: read_gmx
 import Utils: pbc
