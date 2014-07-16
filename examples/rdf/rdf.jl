@@ -69,7 +69,7 @@ function normalize(g,gmx,nbins,bin_width,group1,group2)
     for i in 1:nbins
         r = float(i)  + 0.5
         bin_vols[i] = r^3 - (r-1.0)^3
-        bin_vols[i] = 4.0/3.0 * pi * (bin_width)^3 * bin_vols[i]
+        bin_vols[i] *= 4.0/3.0 * pi * (bin_width)^3 
     end
 
     # TODO: only works if we have a constant volume with a cubic box
@@ -85,7 +85,7 @@ function output(g,bin_width,outfile)
 
     bin = Array(Float64,size(g,1))
 
-    for i in 1:size(g,1) - 1
+    for i in 1:size(g,1)
         bin[i] = float(i) * bin_width
 		@printf(f,"%12.6f",bin[i])
 		@printf(f,"%12.6f\n",g[i])
@@ -141,6 +141,7 @@ function main()
 
     end 
 
+    println(char(13),"Binning complete.        ")
     normalize(g,gmx,nbins,bin_width,group1,group2)
 
     output(g,bin_width,"rdf.dat")
