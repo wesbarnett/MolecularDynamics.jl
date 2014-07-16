@@ -123,6 +123,8 @@ function main()
 
     g = zeros(Float64,nbins)
 
+    # Have to keep this in a separate file so that it is available to all
+    # processes
     require("do_binning.jl")
 
     np = nprocs()
@@ -130,8 +132,7 @@ function main()
     rrefs = {}
     g_tmp = {}
 
-    start_time = time()
-
+    # Spawn processes
     for i in 1:np
 
         first = size*(i-1)+1
@@ -145,18 +146,17 @@ function main()
 
     end
 
-    # wait for and fetch results
+    # Wait for and fetch results
     while length(rrefs) > 0
         push!(g_tmp,fetch(pop!(rrefs)))
     end
 
-    # combine together
+    # Combine together
     for i in 1:np
         for j in 1:nbins
             g[j] += g_tmp[i][j]
         end
     end
-    println(time() - start_time)
 
     println(char(13),"Binning complete.        ")
     normalize(g,gmx,nbins,bin_width,group1,group2)
