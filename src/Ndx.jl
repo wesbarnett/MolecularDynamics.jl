@@ -1,3 +1,11 @@
+# James W. Barnett
+# jbarnet4@tulane.edu
+# Module for reading in Gromacs index files.
+
+# Simply call "read_ndx(filename)" and a dictionary containing
+# the locations for each index group is returned. The names of the 
+# index group are the keys to the dictionary.
+
 module Ndx
 
 export read_ndx

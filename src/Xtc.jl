@@ -1,4 +1,4 @@
-# James W. Barnett (c) 2014
+# James W. Barnett
 # jbarnet4@tulane.edu
 # Julia module for reading in xtc file with libxdrfile
 

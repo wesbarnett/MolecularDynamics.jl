@@ -1,6 +1,6 @@
-# James W. Barnett (c) 2014
+# James W. Barnett
 # jbarnet4@tulane.edu
-# Module for reading in xtc file with libxdrfile
+# Module for reading in xtc file with libxdrfile and saving to an array
 
 module Gmx
 
