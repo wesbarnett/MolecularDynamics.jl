@@ -206,7 +206,7 @@ function read_gmx(xtc_file,first,last,skip,ndx_file="0",group...)
 		x_dict,
 		natoms_dict )
 
-	gmx.no_frames = no_frameigs
+	gmx.no_frames = no_frames
     gmx.time = gmx_tmp.time[1:no_frames]
 	gmx.box[:] = gmx_tmp.box[1:no_frames]
 	gmx.natoms = gmx_tmp.natoms
