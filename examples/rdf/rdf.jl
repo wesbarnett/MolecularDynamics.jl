@@ -98,6 +98,29 @@ function output(g,bin_width,outfile)
 
 end
 
+function do_binning(g,gmx,nbins,bin_width,r_excl2,group1,group2)
+
+    for frame in 1:gmx.no_frames
+
+		print(char(13),"Binning frame: ",frame)
+
+        for i in 1:gmx.natoms[group1]
+    
+            for j in 1:gmx.natoms[group2]
+
+                atom_i = gmx.x[group1][frame][:,i]
+                atom_j = gmx.x[group2][frame][:,j]
+
+                bin(g,atom_i,atom_j,gmx.box[frame],nbins,bin_width,r_excl2)
+
+            end
+
+        end
+
+    end 
+
+end
+
 function main()
 
     parsed_args = parse_commandline()
@@ -122,24 +145,7 @@ function main()
 
     g = zeros(Float64,nbins)
 
-    for frame in 1:gmx.no_frames
-
-		print(char(13),"Binning frame: ",frame)
-
-        for i in 1:gmx.natoms[group1]
-    
-            for j in 1:gmx.natoms[group2]
-
-                atom_i = gmx.x[group1][frame][:,i]
-                atom_j = gmx.x[group2][frame][:,j]
-
-                bin(g,atom_i,atom_j,gmx.box[frame],nbins,bin_width,r_excl2)
-
-            end
-
-        end
-
-    end 
+    do_binning(g,gmx,nbins,bin_width,r_excl2,group1,group2)
 
     println(char(13),"Binning complete.        ")
     normalize(g,gmx,nbins,bin_width,group1,group2)
