@@ -1,7 +1,8 @@
 # James W. Barnett
 # jbarnet4@tulane.edu
 # Creates a radial distribution function given two groups (in this case "C" and
-# "OW", which can be changed by the user in the main function.
+# "OW", which can be changed by the user in the main function. Note that this
+# program only works with a constant volume system and with a box that is cubic.
 
 import Gmx: read_gmx
 import Utils: pbc
@@ -43,6 +44,14 @@ function parse_commandline()
             help = "Exclusion distance."
             arg_type = Float64
             default = 0.1
+        "--outfile","-o"
+            help = "Data output file."
+            arg_type = String
+            default = "rdf.dat"
+        "--plotfile","-p"
+            help = "Plot output file."
+            arg_type = String
+            default = "plot.svg"
     end
 
     return parse_args(s)
@@ -79,7 +88,7 @@ function normalize(g,gmx,nbins,bin_width,group1,group2)
 
 end
 
-function output(g,bin_width,outfile)
+function output(g,bin_width,outfile,plotfile)
 
     f = open(outfile, "w")
 
@@ -94,7 +103,7 @@ function output(g,bin_width,outfile)
 
     plot(bin, g, color="red", linewidth=2.0, linestyle="solid")
     title("Radial Distribution Function")
-    savefig("plot.svg")
+    savefig(plotfile)
 
 end
 
@@ -135,6 +144,9 @@ function main()
 	skip = parsed_args["skip"]
     bin_width = parsed_args["bin-width"]
     r_excl = parsed_args["r-excl"]
+    plotfile = parsed_args["plotfile"]
+    outfile = parsed_args["outfile"]
+    
 
     r_excl2 = r_excl^2
 
@@ -153,7 +165,7 @@ function main()
     println(char(13),"Binning complete.        ")
     normalize(g,gmx,nbins,bin_width,group1,group2)
 
-    output(g,bin_width,"rdf.dat")
+    output(g,bin_width,outfile,plotfile)
 
 end
 
