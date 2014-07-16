@@ -11,3 +11,11 @@ Julia language. Several modules are includes.
 *  Utils - some misc. functions (for now).
 
 You should check out the examples folder for more information.
+
+Note that this is a work in progress and probably contains many bugs. 
+
+Requirements
+------------
+
+The xdrfile library is required for reading in Gromacs xtc files. You can
+[download it here](http://www.gromacs.org/Downloads) (bottom of the page).
