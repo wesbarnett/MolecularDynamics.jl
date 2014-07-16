@@ -104,12 +104,17 @@ function do_binning(g,gmx,nbins,bin_width,r_excl2,group1,group2)
 
 		print(char(13),"Binning frame: ",frame)
 
-        for i in 1:gmx.natoms[group1], j in 1:gmx.natoms[group2]
+        for i in 1:gmx.natoms[group1]
 
             atom_i = gmx.x[group1][frame][:,i]
-            atom_j = gmx.x[group2][frame][:,j]
 
-            bin(g,atom_i,atom_j,gmx.box[frame],nbins,bin_width,r_excl2)
+            for j in 1:gmx.natoms[group2]
+
+                atom_j = gmx.x[group2][frame][:,j]
+
+                bin(g,atom_i,atom_j,gmx.box[frame],nbins,bin_width,r_excl2)
+
+            end
 
         end
 
