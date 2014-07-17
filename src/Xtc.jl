@@ -4,7 +4,7 @@
 
 module Xtc
 
-export xtc_init, read_xtc, close_xtc, read_gmx
+export xtc_init, read_xtc, close_xtc
 
 type xtcType
     natoms
