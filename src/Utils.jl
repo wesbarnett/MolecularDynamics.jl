@@ -5,7 +5,8 @@
 
 module Utils
 
-export pbc
+export pbc, 
+       dih_angle
 
 # Adjusts for periodic boundary condition. Input is a three-dimensional
 # vector (the position) and the box ( 3 x 3 Array). A 3d vector is returned.
@@ -38,8 +39,14 @@ function pbc(a,box)
 
 end
 
-# Returns the torsion / dihedral angle consisting of four atoms
-function dih_ang(i,j,k,l,box)
+#= 
+   Function calculates the torsion / dihedral angle from four atoms'
+   positions. Source: Blondel and Karplus, J. Comp. Chem., Vol. 17, No. 9, 1
+   132-1 141 (1 996). Note that it returns in radians.
+=#
+function dih_angle(i::Array{Float32,1}, j::Array{Float32,1},
+                   k::Array{Float32,1}, l::Array{Float32,1},
+                   box::Array{Float32,2})
 
     H = Array(Float64,3)
     G = Array(Float64,3)
@@ -61,6 +68,48 @@ function dih_ang(i,j,k,l,box)
     A = cross(F,G)
     B = cross(H,G)
     cross_BA = cross(B,A)
+
+    Amag = sqrt(dot(A,A))
+    Bmag = sqrt(dot(B,B))
+    Gmag = sqrt(dot(G,G))
+
+    sin_phi = dot(cross_BA,G)/(Amag * Bmag * Gmag)
+    cos_phi = dot(A,B)/(Amag * Bmag)
+
+    #The torsion / dihedral angle, atan2 takes care of the sign
+    # Argument 1 determines the sign
+    phi = atan2(sin_phi,cos_phi)
+
+    return phi
+
+end
+
+function dih_angle(a::Array{Float32,2},box::Array{Float32,2})
+
+    H = Array(Float64,3)
+    G = Array(Float64,3)
+    F = Array(Float64,3)
+    A = Array(Float64,3)
+    B = Array(Float64,3)
+    cross_BA = Array(Float64,3)
+
+    H = a[:,3] - a[:,4]
+    H = pbc(H,box)
+
+    G = a[:,3] - a[:,2]
+    G = pbc(G,box)
+        
+    F = a[:,2] - a[:,1]
+    F = pbc(F,box)
+
+    # Cross products
+    A = cross(F,G)
+    B = cross(H,G)
+    cross_BA = cross(B,A)
+
+    Amag = sqrt(dot(A,A))
+    Bmag = sqrt(dot(B,B))
+    Gmag = sqrt(dot(G,G))
 
     sin_phi = dot(cross_BA,G)/(Amag * Bmag * Gmag)
     cos_phi = dot(A,B)/(Amag * Bmag)
