@@ -1,4 +1,4 @@
-module MolecularDynamicsAnalysis
+module MolecularDynamics
 
     include("Xtc.jl")
     include("Ndx.jl")
