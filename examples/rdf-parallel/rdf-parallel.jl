@@ -5,8 +5,9 @@
 # program only works with a constant volume system and with a box that is
 # cubic. This version does the binning part in parallel.
 
-import Gmx: read_gmx
-import Utils: pbc
+using MolecularDynamicsAnalysis
+using MolecularDynamicsAnalysis.Gmx
+using MolecularDynamicsAnalysis.Utils
 
 using ArgParse
 using PyPlot
