@@ -39,6 +39,25 @@ function pbc(a::Array{Float32,1},box::Array{Float32,2})
 
 end
 
+function bond_angle(i::Array{Float32,1},j::Array{Float32,1},
+                    k::Array{Float32,1},box::Array{Float32,2})
+
+    bond1 = Array(Float64,3)
+    bond2 = Array(Float64,3)
+
+    bond1 = j - i
+    bond1 = pbc(bond1,box)
+
+    bond2 = j - k
+    bond2 = pbc(bond2,box)
+
+    bond1mag = sqrt(dot(bond1,bond1))
+    bond2mag = sqrt(dot(bond2,bond2))
+
+    angle = acos(dot(bond1,bond2)/(bond1mag * bond2mag))
+
+end
+
 #= 
    Function calculates the torsion / dihedral angle from four atoms'
    positions. Source: Blondel and Karplus, J. Comp. Chem., Vol. 17, No. 9, 1
