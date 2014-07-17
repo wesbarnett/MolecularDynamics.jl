@@ -159,7 +159,7 @@ An index file can be specified with groups again:
     First frame to save: 5
     Last frame to save: 10
     Saving every other frame.
-    Initializing ../examples/gmx-test/traj.xtc
+    Initializing traj.xtc
     No. of atoms = 2014
     Saving the following index groups:
       C (4 elements)
@@ -174,7 +174,7 @@ First import the Xtc module and initialize the file:
     juila> import Xtc: xtc_init, read_xtc, close_xtc
 
     juila> stat, xtc = xtc_init("traj.xtc")
-    Initializing ../examples/gmx-test/traj.xtc
+    Initializing traj.xtc
     No. of atoms = 2014
 
     julia> stat
@@ -285,7 +285,7 @@ You could then access those atoms from an xtcType object:
     juila> import Xtc: xtc_init, read_xtc, close_xtc
 
     julia> stat, xtc = xtc_init("traj.xtc");
-    Initializing ../examples/gmx-test/traj.xtc
+    Initializing traj.xtc
     No. of atoms = 2014
 
     juila> stat, xtc = read_xtc("traj.xtc")
