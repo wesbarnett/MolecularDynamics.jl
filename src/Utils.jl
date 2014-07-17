@@ -61,7 +61,7 @@ function bond_angle(i::Array{Float32,1},j::Array{Float32,1},
 
 end
 
-function bond_angle(a::Array{Float32,3},box::Array{Float32,2})
+function bond_angle(a::Array{Float32,2},box::Array{Float32,2})
 
     angle = bond_angle(a[:,1],a[:,2],a[:,3],box)
 
