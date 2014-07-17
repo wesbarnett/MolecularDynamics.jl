@@ -1,8 +1,8 @@
 JuliaGromacsUtils
 =================
 
-These are some utilities for reading in and processing Gromacs-related file formats with the
-[Julia](http://www.julialang.org)  language. Several modules are includes.
+These are some utilities for reading in and processing [Gromacs](http://www.gromacs.org)-related file formats with the
+[Julia](http://www.julialang.org) language. Several modules are included.
 
 *  Gmx - the main module. Combine Xtc and Ndx functions to be able to read in an xtc file into an
    array for processing.
@@ -76,7 +76,7 @@ Time at a frame 5 (in ps):
 The box at frame 10:
 
     julia> g.box[10]
-    3x3 Array{Float32,2}:
+    3/x3 Array{Float32,2}:
      2.45527  0.0      0.0    
      0.0      2.45527  0.0    
      0.0      0.0      2.45527
