@@ -54,7 +54,16 @@ function save_xtc_frame(gmx::gmxType,frame::Int,xtc,locs,group::String)
 	return gmx
 end
 
-function read_gmx(xtc_file::String,first::Int=1,last::Int=100000,skip::Int=1,ndx_file::String="0",group::String...)
+function read_gmx(xtc_file::String,ndx_file::String,group::String...)
+
+	gmx = read_gmx(xtc_file,1,100000,1,ndx_file,group...)
+
+	return gmx
+end
+
+#TODO: find a better way to handle optional arguments
+function read_gmx(xtc_file::String,first::Int=1,last::Int=100000,skip::Int=1,
+	ndx_file::String="0",group::String...)
 
     println("First frame to save: ", first)
     println("Last frame to save: ", last)
@@ -77,6 +86,8 @@ function read_gmx(xtc_file::String,first::Int=1,last::Int=100000,skip::Int=1,ndx
 
 	# if no index file is specified
 	if ndx_file=="0"
+
+		println("Saving all atoms.")
   
 		# No groups were included since there was no index file
 		group = Array(String,1)
@@ -91,6 +102,12 @@ function read_gmx(xtc_file::String,first::Int=1,last::Int=100000,skip::Int=1,ndx
 	# if an index file is specified
 	else
 
+		if (size(group,1) == 0)
+			error("Index file was specified but no index groups were indicated.")
+		end
+
+		println("Saving the following index groups:")
+
 		ndx_dict = read_ndx(ndx_file)
 
 		# Create dictionary containing number of atoms for each group
@@ -98,6 +115,7 @@ function read_gmx(xtc_file::String,first::Int=1,last::Int=100000,skip::Int=1,ndx
 		for i in group
 			natoms = size(ndx_dict[i],1)
 			natoms_dict[i] = natoms
+		    println("  ",i,": ",natoms," atoms")
 			x_dict_tmp[i] = fill!(Array(Any,last),Array(Float32,(3,int64(natoms))))
 		end
 
