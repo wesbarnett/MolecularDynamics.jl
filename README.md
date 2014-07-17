@@ -33,7 +33,7 @@ This is an unregistered package. Open the REPL:
 
 Now clone the package:
 
-    julia> Pkg.clone("https://github.com/wesbarnett/MolecularDynamics.jl.git")
+    julia> Pkg.clone("MolecularDynamics")
 
 To start using the package do the following:
 
