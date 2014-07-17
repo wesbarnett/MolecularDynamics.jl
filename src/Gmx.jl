@@ -28,14 +28,14 @@ export read_gmx
 =#
 
 type gmxType
-	no_frames
+	no_frames::Int
 	time
 	box
     x
  	natoms
 end
 
-function save_xtc_frame(gmx,frame,xtc)
+function save_xtc_frame(gmx::gmxType,frame::Int,xtc)
 
     gmx.time[frame] = xtc.time[]
     gmx.box[frame] = xtc.box[1:3,1:3]
@@ -45,7 +45,7 @@ function save_xtc_frame(gmx,frame,xtc)
 
 end
 
-function save_xtc_frame_ndx(gmx,frame,xtc,locs,group)
+function save_xtc_frame_ndx(gmx::gmxType,frame::Int,xtc,locs,group::String)
 
     gmx.time[frame] = xtc.time[]
     gmx.box[frame] = xtc.box[1:3,1:3]
@@ -55,7 +55,7 @@ function save_xtc_frame_ndx(gmx,frame,xtc,locs,group)
 end
 
 
-function read_gmx(xtc_file,first,last,skip,ndx_file="0",group...)
+function read_gmx(xtc_file::String,first::Int,last::Int,skip::Int,ndx_file::String="0",group::String...)
 
     println("First frame to save: ", first)
     println("Last frame to save: ", last)
@@ -85,16 +85,8 @@ function read_gmx(xtc_file,first,last,skip,ndx_file="0",group...)
 		# We use a dictionary for the natoms and coordinates even though
 		# we know there will be only one key. This is to remain consistent
 		# if we were to have multiple groups
-
 		natoms_dict["all"] = xtc.natoms
-		#x_vec_tmp = Array(Float32,3)
-		#x_atom_array_tmp = Array(Any,int64(xtc.natoms))
-		#fill!(x_atom_array_tmp,x_vec_tmp)
-
-		x_atom_array_tmp = Array(Float32,(3,int64(xtc.natoms)))
-		x_frame_array_tmp = Array(Any,last)
-		fill!(x_frame_array_tmp,x_atom_array_tmp)
-		x_dict_tmp["all"] = x_frame_array_tmp
+		x_dict_tmp["all"] = fill!(Array(Any,last),Array(Float32,(3,int64(xtc.natoms))))
   
 	# if an index file is specified
 	else
@@ -106,13 +98,7 @@ function read_gmx(xtc_file,first,last,skip,ndx_file="0",group...)
 		for i in group
 			natoms = size(ndx_dict[i],1)
 			natoms_dict[i] = natoms
-			#x_vec_tmp = Array(Float32,3)
-			#x_atom_array_tmp = Array(Any,int64(natoms))
-			#fill!(x_atom_array_tmp,x_vec_tmp)
-			x_atom_array_tmp = Array(Float32,(3,int64(natoms)))
-			x_frame_array_tmp = Array(Any,last)
-			fill!(x_frame_array_tmp,x_atom_array_tmp)
-			x_dict_tmp[i] = x_frame_array_tmp
+			x_dict_tmp[i] = fill!(Array(Any,last),Array(Float32,(3,int64(natoms))))
 		end
 
 	end
@@ -178,24 +164,13 @@ function read_gmx(xtc_file,first,last,skip,ndx_file="0",group...)
 
 	if ndx_file == "0"
 
-		x_vec = Array(Float32,3)
-		x_atom_array = Array(Any,int64(xtc.natoms))
-		fill!(x_atom_array,x_vec)
-		x_frame_array = Array(Any,no_frames)
-		fill!(x_frame_array,x_atom_array)
-		x_dict["all"] = x_frame_array
+		x_dict["all"] = fill!(Array(Any,no_frames),Array(Float32,(3,int64(xtc.natoms))))
 
 	else
 
 		for i in group
 
-			#x_vec = Array(Float32,3)
-			#x_atom_array = Array(Any,int64(gmx_tmp.natoms[i]))
-			#fill!(x_atom_array,x_vec)
-			x_atom_array = Array(Float32,(3,int64(gmx_tmp.natoms[i])))
-			x_frame_array = Array(Any,no_frames)
-			fill!(x_frame_array,x_atom_array)
-			x_dict[i] = x_frame_array
+			x_dict[i] = fill!(Array(Any,no_frames),Array(Float32,(3,int64(gmx_tmp.natoms[i]))))
 
 		end
 
