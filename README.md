@@ -1,6 +1,9 @@
 MolecularDynamicsAnalysis
 =========================
 
+James W. Barnett
+jbarnet4@tulane.edu
+
 These are some utilities for reading in and processing [Gromacs](http://www.gromacs.org)-related file formats with the
 [Julia](http://www.julialang.org) language. Several modules are included.
 
@@ -10,7 +13,8 @@ These are some utilities for reading in and processing [Gromacs](http://www.grom
 *  Ndx - read in ndx files.
 *  Utils - some misc. functions (for now).
 
-Note that this is a work in progress and probably contains a few bugs. 
+Note that this is a work in progress and probably contains a few bugs. Please
+check it out and give me some feedback.
 
 Requirements
 ------------
@@ -42,9 +46,13 @@ To use a specific module do "using" for that module. For example, for Gmx do:
 
 Example Usages
 --------------
-Here are a few ways to use these modules. The following uses "traj.xtc" and
-"index.ndx" from the "examples/gmx-test" directory, but you can use any xtc file
-and corresponding index file you wish. First open the REPL:
+Here are a few ways to use these modules in the REPL. Any of these functions can
+be put into a script. Some examples are in the "examples" directory, including a
+radial distribution calculation. 
+
+The following uses "traj.xtc" and "index.ndx" from the "examples/gmx-test" 
+directory, but you can use any xtc file and corresponding index file you wish. 
+First open the REPL:
 
     julia
 
@@ -306,11 +314,12 @@ You could then access those atoms from an xtcType object:
     juila> stat, xtc = read_xtc("traj.xtc")
 
 These are the coordinates of just the "C" group from this frame:
+
     julia> xtc.x[:,C_locations]
     3x4 Array{Float32,2}:
      1.297  1.249  1.334  1.269
      0.937  1.021  1.145  1.21 
      0.483  0.601  0.638  0.762
 
-Lastly, some example scripts that can be run outside of the REPL are located in
-the "examples" folder.
+As I stated earlier, some of these functions would be much more of use in a
+script, so check out the examples.
