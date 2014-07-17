@@ -6,8 +6,8 @@ module Gmx
 
 export read_gmx
 
-import JuliaGromacsUtils.Xtc: xtc_init, read_xtc, close_xtc
-import JuliaGromacsUtils.Ndx: read_ndx
+import ..Xtc: xtc_init, read_xtc, close_xtc
+import ..Ndx: read_ndx
 
 #=	gmxType is what is returned at the end of running "read_gmx"
 	The variable "gmx" of gmxType is defined in "read_gmx" 
