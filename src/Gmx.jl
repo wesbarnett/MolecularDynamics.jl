@@ -6,14 +6,6 @@ module Gmx
 
 export read_gmx
 
-type gmxType
-	no_frames::Int
-	time
-	box
-    x
- 	natoms
-end
-
 import JuliaGromacsUtils.Xtc: xtc_init, read_xtc, close_xtc
 import JuliaGromacsUtils.Ndx: read_ndx
 
@@ -34,6 +26,15 @@ import JuliaGromacsUtils.Ndx: read_ndx
 	natoms		-   the number of atoms in each group
 					accessed by "gmx.natoms["Group"]
 =#
+
+type gmxType
+	no_frames::Int
+	time
+	box
+    x
+ 	natoms
+end
+
 
 function save_xtc_frame(gmx::gmxType,frame::Int,xtc)
 
