@@ -104,9 +104,8 @@ function read_gmx(xtc_file::String,first::Int,last::Int,skip::Int,ndx_file::Stri
 
 	end
 
-    box = Array(Float32,(3,3))
     box_array = Array(Any,last)
-    fill!(box_array,box)
+    fill!(box_array,Array(Float32,(3,3)))
 
 	gmx_tmp = gmxType(
 	    last,
@@ -157,22 +156,12 @@ function read_gmx(xtc_file::String,first::Int,last::Int,skip::Int,ndx_file::Stri
     println(char(13),"Read in ", no_frames, " frames.")
 
     # Resize the arrays
-
-    box = Array(Float32,(3,3))
     box_array = Array(Any,no_frames)
-    fill!(box_array,box)
+    fill!(box_array,Array(Float32,(3,3)))
 
-	if ndx_file == "0"
+	for i in group
 
-		x_dict["all"] = fill!(Array(Any,no_frames),Array(Float32,(3,int64(xtc.natoms))))
-
-	else
-
-		for i in group
-
-			x_dict[i] = fill!(Array(Any,no_frames),Array(Float32,(3,int64(gmx_tmp.natoms[i]))))
-
-		end
+		x_dict[i] = fill!(Array(Any,no_frames),Array(Float32,(3,int64(gmx_tmp.natoms[i]))))
 
 	end
 
