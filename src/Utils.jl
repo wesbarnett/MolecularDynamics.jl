@@ -39,6 +39,8 @@ function pbc(a::Array{Float32,1},box::Array{Float32,2})
 
 end
 
+# Returns bond angle using the input of three atoms' coordinates. Angle
+# is in radians
 function bond_angle(i::Array{Float32,1},j::Array{Float32,1},
                     k::Array{Float32,1},box::Array{Float32,2})
 
