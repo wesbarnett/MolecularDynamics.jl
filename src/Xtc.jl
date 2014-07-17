@@ -18,7 +18,7 @@ end
 
 function xtc_init(xtcfile) 
 
-    println(string("Initializting "), xtcfile)
+    println(string("Initializing "), xtcfile)
 
     # Check if file exists
     if (~isfile(xtcfile)) 
