@@ -1,5 +1,5 @@
-MolecularDynamicsAnalysis
-=========================
+MolecularDynamics
+=================
 
 James W. Barnett
 jbarnet4@tulane.edu
