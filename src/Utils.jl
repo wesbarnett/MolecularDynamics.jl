@@ -38,4 +38,39 @@ function pbc(a,box)
 
 end
 
+# Returns the torsion / dihedral angle consisting of four atoms
+function dih_ang(i,j,k,l,box)
+
+    H = Array(Float64,3)
+    G = Array(Float64,3)
+    F = Array(Float64,3)
+    A = Array(Float64,3)
+    B = Array(Float64,3)
+    cross_BA = Array(Float64,3)
+
+    H = k - l
+    H = pbc(H,box)
+
+    G = k - j
+    G = pbc(G,box)
+        
+    F = j - i
+    F = pbc(F,box)
+
+    # Cross products
+    A = cross(F,G)
+    B = cross(H,G)
+    cross_BA = cross(B,A)
+
+    sin_phi = dot(cross_BA,G)/(Amag * Bmag * Gmag)
+    cos_phi = dot(A,B)/(Amag * Bmag)
+
+    #The torsion / dihedral angle, atan2 takes care of the sign
+    # Argument 1 determines the sign
+    phi = atan2(sin_phi,cos_phi)
+
+    return phi
+
+end
+
 end
