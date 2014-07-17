@@ -10,7 +10,7 @@ module Ndx
 
 export read_ndx
 
-function read_ndx(filename)
+function read_ndx(filename::String)
 
     title_tmp = Array(String,100)
     title_line_tmp = Array(Int,100)
