@@ -1,5 +1,5 @@
-JuliaGromacsUtils
-=================
+MolecularDynamicsAnalysis
+=========================
 
 These are some utilities for reading in and processing [Gromacs](http://www.gromacs.org)-related file formats with the
 [Julia](http://www.julialang.org) language. Several modules are included.
@@ -20,6 +20,26 @@ The xdrfile library is required for reading in Gromacs xtc files. You can
 sure you install the library as a shared library; there is an option when you
 configure the installation.
 
+Installation
+------------
+
+This is an unregistered package. Open the REPL:
+
+    julia
+
+Now clone the package:
+
+    julia> Pkg.clone("https://github.com/wesbarnett/MolecularDynamicsAnalysis.jl.git")
+
+To start using the package do the following:
+
+    julia> using MolecularDynamicsAnalysis
+
+To use a specific module do "using" for that module. For example, for Gmx do:
+
+    julia> using JuilaGromacsUtils.Gmx
+
+
 Example Usages
 --------------
 Here are a few ways to use these modules. The following uses "traj.xtc" and
@@ -28,10 +48,11 @@ and corresponding index file you wish. First open the REPL:
 
     julia
 
-Now in the REPL import the Gmx module and the "read_gmx" function. The module must be in your [module
-path](http://julia.readthedocs.org/en/latest/manual/modules/#module-paths).
+First start using the Gmx module:
 
-    julia> import Gmx: read_gmx
+    julia> using MolecularDynamicsAnalysis
+
+    julia> using MolecularDynamicsAnalysis.Gmx
 
 Now here are a few things you can do with "read_gmx". Read in an xtc file and
 save all of the data to various variables:
@@ -169,9 +190,9 @@ So far I've shown how to read in all the frames of an xtc file (or an index
 group) and save them to a gmxType object. You can also read in the xtc file
 frame-by-frame using the Xtc module:
 
-First import the Xtc module and initialize the file:
+First start using the Xtc module and initialize the file:
 
-    juila> import Xtc: xtc_init, read_xtc, close_xtc
+    juila> using JuilaGromacsUtils.Xtc
 
     juila> stat, xtc = xtc_init("traj.xtc")
     Initializing traj.xtc
@@ -248,7 +269,7 @@ Note that the first read is at step 0 with a time of 0.0. That's just due to the
 You can also use the Ndx module to probe the index file directly (the Gmx module
 does this when you specify an index file and index groups).
 
-    julia> import Ndx: read_ndx
+    julia> using MolecularDynamicsAnalysis.Ndx
 
     julia> ndx = read_ndx("index.ndx");
 
