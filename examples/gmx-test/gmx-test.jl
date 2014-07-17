@@ -9,8 +9,8 @@
 # the directory containing this module to the JULIA_LOAD_PATH environmental
 # variable.
 
-import Gmx: read_gmx
-
+using MolecularDynamicsAnalysis
+using MolecularDynamicsAnalysis.Gmx
 using ArgParse
 
 function parse_commandline()

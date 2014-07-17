@@ -69,7 +69,7 @@ Your output should look something like this:
     Saving all atoms.
     Saved 101 frames.
 
-You can now access all of the coordinates in the "g" object which has a type of
+You can now access all of the saved information in the "g" object which has a type of
 gmxType:
 
     juila> typeof(g)
