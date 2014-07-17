@@ -54,7 +54,7 @@ function save_xtc_frame(gmx::gmxType,frame::Int,xtc,locs,group::String)
 	return gmx
 end
 
-function read_gmx(xtc_file::String,first::Int,last::Int,skip::Int,ndx_file::String="0",group::String...)
+function read_gmx(xtc_file::String,first::Int=1,last::Int=100000,skip::Int=1,ndx_file::String="0",group::String...)
 
     println("First frame to save: ", first)
     println("Last frame to save: ", last)
