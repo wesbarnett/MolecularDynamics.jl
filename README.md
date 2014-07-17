@@ -63,7 +63,7 @@ gmxType:
      :natoms
 
 How many frames were saved to "g". Note that Gromacs simulations start at time
-0, which is saved to frame 1 in our arrays.
+0, which is saved to the first element in our arrays.
 
     julia> g.no_frames
     101
@@ -238,13 +238,7 @@ The precision:
     juila> xtc.prec[]
     1000.0f0
     
-Calling "read_xtc" again will read the next frame. Note that "read_xtc" returns
-a tuple with the first element giving the status of the read and the second
-giving an xtcType object containing all of the above information. You could
-simply place the "read_xtc" function in a loop and then do your calculations
-within the loop (the Gmx module does this but simply saves everything to a
-gmxType object). Once you're finished reading frames, you can close the xtc
-file:
+Note that the first read is at step 0 with a time of 0.0. That's just due to the way simulations work in Gromacs. Calling "read_xtc" again will read the next frame. Note that "read_xtc" returns a tuple with the first element giving the status of the read and the second giving an xtcType object containing all of the above information. You could simply place the "read_xtc" function in a loop and then do your calculations within the loop (the Gmx module does this but simply saves everything to a gmxType object). Once you're finished reading frames, you can close the xtc file:
 
     julia> stat = close_xtc(xtc)
 
