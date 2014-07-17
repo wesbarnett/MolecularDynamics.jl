@@ -115,7 +115,7 @@ function read_gmx(xtc_file::String,first::Int=1,last::Int=100000,skip::Int=1,
 		for i in group
 			natoms = size(ndx_dict[i],1)
 			natoms_dict[i] = natoms
-		    println("  ",i,": ",natoms," atoms")
+		    println("  ",i," (",natoms," elements)")
 			x_dict_tmp[i] = fill!(Array(Any,last),Array(Float32,(3,int64(natoms))))
 		end
 
