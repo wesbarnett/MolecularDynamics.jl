@@ -1,4 +1,4 @@
-module JuliaGromacsUtils
+module MolecularDynamicsAnalysis
 
     include("Xtc.jl")
     include("Ndx.jl")
