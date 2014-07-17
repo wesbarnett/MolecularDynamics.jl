@@ -1,11 +1,11 @@
 module JuliaGromacsUtils
 
-export Xtc.xtc_init, 
-       Xtc.read_xtc, 
-       Xtc.close_xtc,
-       Ndx.read_ndx,
-       Gmx.read_gmx,
-       Utils.pbc
+export xtc_init, 
+       read_xtc, 
+       close_xtc,
+       read_ndx,
+       read_gmx,
+       pbc
 
     include("Xtc.jl")
     include("Ndx.jl")
