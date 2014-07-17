@@ -142,7 +142,7 @@ natoms and x are made up of dictionaries, as stated previously:
       "CH2" => {…
       "C"   => {…
 
-You can also save only specific frames to the gmxType object, specifying the first frame to save, the last frame to save, and whether or not to skip frames in saving. The following:
+You can also save only specific frames to the gmxType object, specifying the first frame to save, the last frame to save, and whether or not to skip frames in saving. The following starts at the 5th frame and then ends at the 10th frame, saving only every other frame:
 
     julia> g = read_gmx("traj.xtc",5,10,2);
     First frame to save: 5
