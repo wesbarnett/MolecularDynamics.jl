@@ -1,6 +1,6 @@
 module JuliaGromacsUtils
 
-export Gmx: read_gmx
+export read_gmx
 
     include("Xtc.jl")
     include("Ndx.jl")
