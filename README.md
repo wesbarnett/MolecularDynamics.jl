@@ -169,7 +169,7 @@ So far I've shown how to read in all the frames of an xtc file (or an index
 group) and save them to a gmxType object. You can also read in the xtc file
 frame-by-frame using the Xtc module:
 
-First import and initialize the file:
+First import the Xtc module and initialize the xtc file:
 
     juila> import Xtc: xtc_init, read_xtc, close_xtc
 
