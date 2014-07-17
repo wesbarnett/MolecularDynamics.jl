@@ -37,7 +37,7 @@ To start using the package do the following:
 
 To use a specific module do "using" for that module. For example, for Gmx do:
 
-    julia> using JuilaGromacsUtils.Gmx
+    julia> using MolecularDynamicsAnalysis.Gmx
 
 
 Example Usages
