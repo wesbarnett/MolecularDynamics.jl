@@ -79,6 +79,7 @@ function read_gmx(xtc_file::String,first::Int,last::Int,skip::Int,ndx_file::Stri
 	# if no index file is specified
 	if ndx_file=="0"
   
+		# No groups were included since there was no index file
 		group = Array(String,1)
 		group[1] = "all"
 
@@ -113,7 +114,6 @@ function read_gmx(xtc_file::String,first::Int,last::Int,skip::Int,ndx_file::Stri
 	    box_array,
 		x_dict_tmp,
 	 	natoms_dict)
-
 
     # Skip frames until we get to the first frame to read in
     for frame = 1:(first-1)
