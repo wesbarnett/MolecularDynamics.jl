@@ -11,7 +11,7 @@ These are some utilities for reading in and processing [Gromacs](http://www.grom
    array for processing.
 *  Xtc - read in xtc files.
 *  Ndx - read in ndx files.
-*  Utils - some misc. functions (for now).
+*  Utils - some analytical functions.
 
 Note that this is a work in progress and probably contains a few bugs. Please
 check it out and give me some feedback.
@@ -33,15 +33,15 @@ This is an unregistered package. Open the REPL:
 
 Now clone the package:
 
-    julia> Pkg.clone("https://github.com/wesbarnett/MolecularDynamicsAnalysis.jl.git")
+    julia> Pkg.clone("https://github.com/wesbarnett/MolecularDynamics.jl.git")
 
 To start using the package do the following:
 
-    julia> using MolecularDynamicsAnalysis
+    julia> using MolecularDynamics
 
 To use a specific module do "using" for that module. For example, for Gmx do:
 
-    julia> using MolecularDynamicsAnalysis.Gmx
+    julia> using MolecularDynamics.Gmx
 
 
 Example Usages
@@ -58,9 +58,9 @@ First open the REPL:
 
 First start using the Gmx module:
 
-    julia> using MolecularDynamicsAnalysis
+    julia> using MolecularDynamics
 
-    julia> using MolecularDynamicsAnalysis.Gmx
+    julia> using MolecularDynamics.Gmx
 
 Now here are a few things you can do with "read_gmx". Read in an xtc file and
 save all of the data to various variables:
@@ -277,7 +277,7 @@ Note that the first read is at step 0 with a time of 0.0. That's just due to the
 You can also use the Ndx module to probe the index file directly (the Gmx module
 does this when you specify an index file and index groups).
 
-    julia> using MolecularDynamicsAnalysis.Ndx
+    julia> using MolecularDynamics.Ndx
 
     julia> ndx = read_ndx("index.ndx");
 
