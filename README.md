@@ -60,12 +60,13 @@ gmxType:
     julia> names(g)
     5-element Array{Symbol,1}:
      :no_frames
-    :time     
-    :box      
-    :x        
-    :natoms
+     :time     
+     :box      
+     :x        
+     :natoms
 
-How many frames were saved to "g":
+How many frames were saved to "g". Note that Gromacs simulations start at time
+0, which is saved to frame 1 in our arrays.
 
     julia> g.no_frames
     101
