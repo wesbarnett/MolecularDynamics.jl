@@ -10,12 +10,7 @@ These are some utilities for reading in and processing Gromacs-related file form
 *  Ndx - read in ndx files.
 *  Utils - some misc. functions (for now).
 
-You should check out the examples folder for more information. Specifically
-check out "gmx-test" which uses the Gmx module to read in an xtc file and
-outputs all of the info stored in the arrays. An example xtc file and its
-corresponding gro file are in the folder as a quick comparison.
-
-Note that this is a work in progress and probably contains many bugs. 
+Note that this is a work in progress and probably contains a few bugs. 
 
 Requirements
 ------------
@@ -144,3 +139,94 @@ natoms and x are made up of dictionaries, as stated previously:
     Dict{Any,Any} with 2 entries:
       "CH2" => {…
       "C"   => {…
+
+You can also save only specific frames to the gmxType object, specifying the first frame to save, the last frame to save, and whether or not to skip frames in saving. The following:
+
+    julia> g = read_gmx("traj.xtc",5,10,2);
+    First frame to save: 5
+    Last frame to save: 10
+    Saving every other frame.
+    Initializing traj.xtc
+    No. of atoms = 2014
+    Saving all atoms.
+    Saved 5 frames.
+
+An index file can be specified with groups again:
+
+    julia> g = read_gmx("traj.xtc",5,10,2,"index.ndx","C");
+    First frame to save: 5
+    Last frame to save: 10
+    Saving every other frame.
+    Initializing ../examples/gmx-test/traj.xtc
+    No. of atoms = 2014
+    Saving the following index groups:
+      C (4 elements)
+    Saved 5 frames.
+
+So far I've shown how to read in all the frames of an xtc file (or an index
+group) and save them to an array. You can also read in the xtc file
+frame-by-frame using the Xtc module:
+
+First import and initialize the file:
+
+    juila> import Xtc: xtc_init, read_xtc, close_xtc
+
+    juila> stat, xtc = xtc_init("traj.xtc")
+    Initializing ../examples/gmx-test/traj.xtc
+    No. of atoms = 2014
+
+    julia> typeof(xtc)
+    xtcType (constructor with 1 method)
+
+    juila> names(xtc)
+    7-element Array{Symbol,1}:
+     :natoms
+     :step  
+     :time  
+     :box   
+     :x     
+     :prec  
+     :xd   
+    
+Now you can read the first frame using the xtc object above. "stat" is returned
+and tells if the initialization / read was successful (0 == success).
+
+    julia> stat, xtc = read_xtc(xtc)
+
+Now you can get the info for the frame you just read in. Note that some of these
+are zero element arrays for compatibility with the C library:
+
+    julia> xtc.natoms
+    2014
+
+    juila> xtc.step[]
+    0
+
+    juila> xtc.time[]
+    0.0f0
+
+    juila> xtc.box
+    3x3 Array{Float32,2}:
+     2.47699  0.0      0.0    
+     0.0      2.47699  0.0    
+     0.0      0.0      2.47699
+
+The coordinates of the first atom:
+
+    juila> xtc.x[:,1]
+    3-element Array{Float32,1}:
+     1.297
+     0.937
+     0.483
+
+The precision:
+
+    juila> xtc.prec[]
+    1000.0f0
+    
+Calling "read_xtc" again will read the next frame. Note that "read_xtc" returns
+a tuple with the first element giving the status of the read and the second
+giving an xtcType object containing all of the above information.
+
+Lastly, some example scripts that can be run outside of the REPL are located in
+the "examples" folder.
