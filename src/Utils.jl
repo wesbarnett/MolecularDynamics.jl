@@ -10,7 +10,7 @@ export pbc,
 
 # Adjusts for periodic boundary condition. Input is a three-dimensional
 # vector (the position) and the box ( 3 x 3 Array). A 3d vector is returned.
-function pbc(a,box) 
+function pbc(a::Array{Float32,1},box::Array{Float32,2}) 
 
     b = Array(Float64,3)
 	box_inv = Array(Float64,3)
