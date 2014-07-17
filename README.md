@@ -164,7 +164,7 @@ An index file can be specified with groups again:
     Saved 5 frames.
 
 So far I've shown how to read in all the frames of an xtc file (or an index
-group) and save them to an array. You can also read in the xtc file
+group) and save them to a gmxType object. You can also read in the xtc file
 frame-by-frame using the Xtc module:
 
 First import and initialize the file:
@@ -174,6 +174,9 @@ First import and initialize the file:
     juila> stat, xtc = xtc_init("traj.xtc")
     Initializing ../examples/gmx-test/traj.xtc
     No. of atoms = 2014
+
+    julia> stat
+    0
 
     julia> typeof(xtc)
     xtcType (constructor with 1 method)
@@ -188,13 +191,17 @@ First import and initialize the file:
      :prec  
      :xd   
     
-Now you can read the first frame using the xtc object above. "stat" is returned
-and tells if the initialization / read was successful (0 == success).
+"stat" is returned and tells if the initialization / read was successful (0 is success). "xd" is a C pointer that cannot be access from Julia and is solely used for getting the data using the C library xdrfile.
+
+Now you can read the first frame using the xtc object above. 
 
     julia> stat, xtc = read_xtc(xtc)
 
 Now you can get the info for the frame you just read in. Note that some of these
 are zero element arrays for compatibility with the C library:
+
+    julia> stat
+    0
 
     julia> xtc.natoms
     2014
@@ -219,6 +226,11 @@ The coordinates of the first atom:
      0.937
      0.483
 
+They y-coordinate of the 3rd atom:
+
+    juila> xtc.x[2,3]
+    0.984f0
+
 The precision:
 
     juila> xtc.prec[]
@@ -226,7 +238,62 @@ The precision:
     
 Calling "read_xtc" again will read the next frame. Note that "read_xtc" returns
 a tuple with the first element giving the status of the read and the second
-giving an xtcType object containing all of the above information.
+giving an xtcType object containing all of the above information. You could
+simply place the "read_xtc" function in a loop and then do your calculations
+within the loop (the Gmx module does this but simply saves everything to a
+gmxType object). Once you're finished reading frames, you can close the xtc
+file:
+
+    julia> stat = close_xtc(xtc)
+
+    julia> stat
+    0
+
+You can also use the Ndx module to probe the index file directly (the Gmx module
+does this when you specify an index file and index groups).
+
+    julia> import Ndx: read_ndx
+
+    julia> ndx = read_ndx("index.ndx");
+
+"read_ndx" returns a dictionary containing all of the different index groups:
+
+    juila> keys(ndx)
+    KeyIterator for a Dict{Any,Any} with 8 entries. Keys:
+    "Water"
+    "System"
+    "CH2"
+    "CH3"
+    "non-Water"
+    "Other"
+    "C"
+    "SOL"
+
+Specifying a key returns the locations of those atoms in the xtc file:
+
+    julia> C_locations = ndx["C"]
+    4-element Array{Int64,1}:
+      1
+      5
+      8
+     11
+
+You could then access those atoms from an xtcType object:
+
+    juila> import Xtc: xtc_init, read_xtc, close_xtc
+
+    julia> stat, xtc = xtc_init("traj.xtc");
+    Initializing ../examples/gmx-test/traj.xtc
+    No. of atoms = 2014
+
+    juila> stat, xtc = read_xtc("traj.xtc")
+
+These are the coordinates of just the "C" group from this frame:
+    julia> xtc.x[:,C_locations]
+    3x4 Array{Float32,2}:
+     1.297  1.249  1.334  1.269
+     0.937  1.021  1.145  1.21 
+     0.483  0.601  0.638  0.762
 
 Lastly, some example scripts that can be run outside of the REPL are located in
 the "examples" folder.
