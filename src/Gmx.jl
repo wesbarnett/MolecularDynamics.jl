@@ -103,8 +103,7 @@ function read_gmx(xtc_file::String,first::Int,last::Int,skip::Int,ndx_file::Stri
 
 	end
 
-    box_array = Array(Any,last)
-    fill!(box_array,Array(Float32,(3,3)))
+    box_array = fill!(Array(Any,last),Array(Float32,(3,3)))
 
 	gmx_tmp = gmxType(
 	    last,
@@ -116,7 +115,7 @@ function read_gmx(xtc_file::String,first::Int,last::Int,skip::Int,ndx_file::Stri
     # Skip frames until we get to the first frame to read in
     for frame = 1:(first-1)
 
-		(stat, xtc) = read_xtc(xtc)
+		stat, xtc = read_xtc(xtc)
 
         if stat != 0
 			break
@@ -128,15 +127,15 @@ function read_gmx(xtc_file::String,first::Int,last::Int,skip::Int,ndx_file::Stri
 	save_frame = 1
     for frame = first:last
 
-		if frame % 1000 == 0
-			print(char(13),"Reading frame: ",frame)
-		end
-
-		(stat, xtc) = read_xtc(xtc)
+		stat, xtc = read_xtc(xtc)
 
         if stat != 0
             no_frames = int( (frame - first) / skip )
 			break
+		end
+
+		if frame % 1000 == 0
+			print(char(13),"Reading frame: ",frame)
 		end
 		
 		if frame % skip == 0
@@ -155,8 +154,7 @@ function read_gmx(xtc_file::String,first::Int,last::Int,skip::Int,ndx_file::Stri
     println(char(13),"Read in ", no_frames, " frames.")
 
     # Resize the arrays
-    box_array = Array(Any,no_frames)
-    fill!(box_array,Array(Float32,(3,3)))
+    box_array = fill!(Array(Any,no_frames),Array(Float32,(3,3)))
 
 	for i in group
 
