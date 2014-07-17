@@ -4,9 +4,9 @@
 # "OW", which can be changed by the user in the main function. Note that this
 # program only works with a constant volume system and with a box that is cubic.
 
-import Gmx: read_gmx
-import Utils: pbc
-
+using MolecularDynamicsAnalysis
+using MolecularDynamicsAnalysis.Gmx
+using MolecularDynamicsAnalysis.Utils
 using ArgParse
 using PyPlot
 
