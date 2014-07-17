@@ -22,7 +22,9 @@ configure the installation.
 
 Example Usages
 --------------
-Here are a few ways to use these modules. First open the REPL:
+Here are a few ways to use these modules. The following uses "traj.xtc" and
+"index.ndx" from the "examples/gmx-test" directory, but you can use any xtc file
+and corresponding index file you wish. First open the REPL:
 
     julia
 
