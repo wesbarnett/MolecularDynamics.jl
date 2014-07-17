@@ -169,7 +169,7 @@ So far I've shown how to read in all the frames of an xtc file (or an index
 group) and save them to a gmxType object. You can also read in the xtc file
 frame-by-frame using the Xtc module:
 
-First import the Xtc module and initialize the xtc file:
+First import the Xtc module and initialize the file:
 
     juila> import Xtc: xtc_init, read_xtc, close_xtc
 
@@ -193,7 +193,7 @@ First import the Xtc module and initialize the xtc file:
      :prec  
      :xd   
     
-"stat" is returned and tells if the initialization / read was successful (0 is success). "xd" is a C pointer that cannot be access from Julia and is solely used for getting the data using the C library xdrfile.
+"stat" is returned and tells if the initialization / read was successful (0 is success). "xd" is a C pointer that cannot be accessed from Julia and is solely used for getting the data using the C library xdrfile.
 
 Now you can read the first frame using the xtc object above. 
 
