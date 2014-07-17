@@ -45,7 +45,7 @@ function save_xtc_frame(gmx::gmxType,frame::Int,xtc)
 
 end
 
-function save_xtc_frame_ndx(gmx::gmxType,frame::Int,xtc,locs,group::String)
+function save_xtc_frame(gmx::gmxType,frame::Int,xtc,locs,group::String)
 
     gmx.time[frame] = xtc.time[]
     gmx.box[frame] = xtc.box[1:3,1:3]
@@ -145,7 +145,7 @@ function read_gmx(xtc_file::String,first::Int,last::Int,skip::Int,ndx_file::Stri
 				gmx_tmp = save_xtc_frame(gmx_tmp,save_frame,xtc)
 			else
 				for grp in 1:no_groups
-					gmx_tmp = save_xtc_frame_ndx(gmx_tmp,save_frame,xtc,ndx_dict[group[grp]],group[grp])
+					gmx_tmp = save_xtc_frame(gmx_tmp,save_frame,xtc,ndx_dict[group[grp]],group[grp])
 				end
 			end
 			save_frame += 1

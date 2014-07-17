@@ -91,13 +91,13 @@ function main()
     # read_gmx can be used with or without an ndxfile
 
     # With an index file with one group
-    #gmx = read_gmx(xtcfile,first_frame,last_frame,skip,ndxfile,"C")
+    gmx = read_gmx(xtcfile,first_frame,last_frame,skip,ndxfile,"C")
 
     # With an index file with multiple groups
     #gmx = read_gmx(xtcfile,first_frame,last_frame,skip,ndxfile,"C","CH2")
 
     # No index file
-    gmx = read_gmx(xtcfile,first_frame,last_frame,skip)
+    #gmx = read_gmx(xtcfile,first_frame,last_frame,skip)
 
     output(gmx)
 
