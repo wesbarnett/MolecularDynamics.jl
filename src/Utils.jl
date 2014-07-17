@@ -114,39 +114,7 @@ end
 
 function dih_angle(a::Array{Float32,2},box::Array{Float32,2})
 
-    H = Array(Float64,3)
-    G = Array(Float64,3)
-    F = Array(Float64,3)
-    A = Array(Float64,3)
-    B = Array(Float64,3)
-    cross_BA = Array(Float64,3)
-
-    H = a[:,3] - a[:,4]
-    H = pbc(H,box)
-
-    G = a[:,3] - a[:,2]
-    G = pbc(G,box)
-        
-    F = a[:,2] - a[:,1]
-    F = pbc(F,box)
-
-    # Cross products
-    A = cross(F,G)
-    B = cross(H,G)
-    cross_BA = cross(B,A)
-
-    Amag = sqrt(dot(A,A))
-    Bmag = sqrt(dot(B,B))
-    Gmag = sqrt(dot(G,G))
-
-    sin_phi = dot(cross_BA,G)/(Amag * Bmag * Gmag)
-    cos_phi = dot(A,B)/(Amag * Bmag)
-
-    #The torsion / dihedral angle, atan2 takes care of the sign
-    # Argument 1 determines the sign
-    phi = atan2(sin_phi,cos_phi)
-
-    return phi
+    return dih_angle(a[:,1],a[:,2],a[:,3],a[:,4],box)
 
 end
 
