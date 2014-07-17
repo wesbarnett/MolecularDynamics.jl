@@ -4,7 +4,7 @@ MolecularDynamics
 James W. Barnett
 jbarnet4@tulane.edu
 
-These are some utilities for reading in and processing [Gromacs](http://www.gromacs.org)-related file formats with the
+These are some utilities for the reading in and analysis of [Gromacs](http://www.gromacs.org)-related file formats with the
 [Julia](http://www.julialang.org) language. Several modules are included.
 
 *  Gmx - the main module. Combine Xtc and Ndx functions to be able to read in an xtc file into an
@@ -200,7 +200,7 @@ frame-by-frame using the Xtc module:
 
 First start using the Xtc module and initialize the file:
 
-    juila> using JuilaGromacsUtils.Xtc
+    juila> using MolecularDynamics.Xtc
 
     juila> stat, xtc = xtc_init("traj.xtc")
     Initializing traj.xtc
