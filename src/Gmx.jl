@@ -4,8 +4,8 @@
 
 module Gmx
 
-import Xtc: xtc_init, read_xtc, close_xtc
-import Ndx: read_ndx
+import JuliaGromacsUtils.Xtc: xtc_init, read_xtc, close_xtc
+import JuliaGromacsUtils.Ndx: read_ndx
 
 export read_gmx
 
