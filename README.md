@@ -516,14 +516,14 @@ here is the distribution of the first dihedral angle in octane from 15,000 frame
       C (8 elements)
     Saved 15001 frames.0
 
-    julia> a = dih_angle(g.x["C"],g.box)
+    julia> a = dih_angle(g.x["C"],g.box);
 
 This just shifts everything below 0 to be from pi to 2pi. Then it changes it all
 to degrees.
 
-    julia> a = map((x) -> if(x < 0.0) x += 2pi else x = x end, a)
+    julia> a = map((x) -> if(x < 0.0) x += 2pi else x = x end, a);
 
-    julia> a = map((x) -> x * 180.0/pi, a)
+    julia> a = map((x) -> x * 180.0/pi, a);
 
 Now to plot it and save it as an image:
 
