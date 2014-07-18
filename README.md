@@ -4,8 +4,9 @@ MolecularDynamics
 James W. Barnett
 jbarnet4@tulane.edu
 
-These are some utilities for the reading in and analysis of [Gromacs](http://www.gromacs.org)-related file formats with the
-[Julia](http://www.julialang.org) language. Several modules are included.
+These are some utilities for the reading in and analysis of [Gromacs](http://www.gromacs.org)
+output file formats with the [Julia](http://www.julialang.org) language. This is for use after a Gromacs
+simulation has been performed. Several modules are included.
 
 *  Gmx - the main module. Combine Xtc and Ndx functions to be able to read in an xtc file into an
    array for processing.
@@ -46,6 +47,9 @@ To use a specific module do "using" for that module. For example, for Gmx do:
 
 Example Usages
 --------------
+
+###Reading in files
+
 Here are a few ways to use these modules in the REPL. Any of these functions can
 be put into a script. Some examples are in the "examples" directory, including a
 radial distribution calculation. 
@@ -323,3 +327,8 @@ These are the coordinates of just the "C" group from this frame:
 
 As I stated earlier, some of these functions would be much more of use in a
 script, so check out the examples.
+
+###Analysis
+Some basic functions are included in the Utils module. These include adjusting
+for the periodic boundary condition (pbc), calculating bond angles
+(bond_angle), and calculating dihedral angles (dih_angle).

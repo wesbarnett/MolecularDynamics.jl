@@ -6,7 +6,8 @@
 module Utils
 
 export pbc, 
-       dih_angle
+       dih_angle,
+	   bond_angle
 
 # Adjusts for periodic boundary condition. Input is a three-dimensional
 # vector (the position) and the box ( 3 x 3 Array). A 3d vector is returned.
@@ -60,9 +61,9 @@ function bond_angle(i::Array{Float32,1},j::Array{Float32,1},
 
 end
 
-function bond_angle(a::Array{Float32,3},box::Array{Float32,2})
+function bond_angle(a::Array{Float32,2},box::Array{Float32,2})
 
-    angle = bond_angle(a[:,1],a[:,2],a[:,3],a[,4],box)
+    angle = bond_angle(a[:,1],a[:,2],a[:,3],box)
 
 end
 
