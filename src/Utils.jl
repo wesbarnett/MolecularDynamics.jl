@@ -59,11 +59,38 @@ function bond_angle(i::Array{Float32,1},j::Array{Float32,1},
 
     angle = acos(dot(bond1,bond2)/(bond1mag * bond2mag))
 
+    return angle
+
 end
 
 function bond_angle(a::Array{Float32,2},box::Array{Float32,2})
 
-    angle = bond_angle(a[:,1],a[:,2],a[:,3],box)
+	angle = Float64[]
+
+	for i in 1:size(a,2)-2
+
+		angle = push!(angle,bond_angle(a[:,i],a[:,i+1],a[:,i+2],box))
+
+	end
+
+	return angle
+
+end
+
+# Cycles through all frames
+function bond_angle(f::Array{Any,1},box::Array{Any,1})
+
+
+    angles = Array(Float64,(size(f[1],2)-2,1))
+	angles = bond_angle(f[1],box[1])
+
+	for i in 2:size(f,1)
+
+		angles = hcat(angles,bond_angle(f[i],box[i]))
+
+	end
+
+    return angles
 
 end
 
