@@ -47,11 +47,6 @@ To start using the package do the following:
 
     julia> using MolecularDynamics
 
-To use a specific module do "using" for that module. For example, for Gmx do:
-
-    julia> using MolecularDynamics.Gmx
-
-
 Example Usages
 --------------
 
@@ -63,15 +58,7 @@ radial distribution calculation.
 
 The following uses "traj.xtc" and "index.ndx" from the "examples/gmx-test" 
 directory, but you can use any xtc file and corresponding index file you wish. 
-First open the REPL:
-
-    julia
-
-First start using the Gmx module:
-
-    julia> using MolecularDynamics
-
-    julia> using MolecularDynamics.Gmx
+First open the REPL.
 
 Now here are a few things you can do with "read_gmx". Read in an xtc file and
 save all of the data to various variables:
@@ -209,9 +196,7 @@ So far I've shown how to read in all the frames of an xtc file (or an index
 group) and save them to a gmxType object. You can also read in the xtc file
 frame-by-frame using the Xtc module:
 
-First start using the Xtc module and initialize the file:
-
-    juila> using MolecularDynamics.Xtc
+First start initialize the file:
 
     juila> stat, xtc = xtc_init("traj.xtc")
     Initializing traj.xtc
@@ -285,10 +270,8 @@ Note that the first read is at step 0 with a time of 0.0. That's just due to the
     julia> stat
     0
 
-You can also use the Ndx module to probe the index file directly (the Gmx module
+You can also use the "read_ndx" module to probe the index file directly ("read_gmx"
 does this when you specify an index file and index groups).
-
-    julia> using MolecularDynamics.Ndx
 
     julia> ndx = read_ndx("index.ndx");
 
@@ -500,10 +483,6 @@ All angles in the first frame:
 #### Dihedral Angle Distribution
 As an example on how to use another package to help analyze some data, you could
 use the Gaston package to plot a histogram of the dihedral angles of a molecule. For example, here is the distribution of the first dihedral angle of octane in water from 15,000 frames. The simulation was done at 313 K for 30 ns.
-
-    julia> using MolecularDynamics.Gmx
-
-    julia> using MolecularDynamics.Utils
 
     julia> g = read_gmx("/home/james/testing/2_prd_313.xtc","/home/james/testing/index.ndx","C");
     First frame to save: 1
