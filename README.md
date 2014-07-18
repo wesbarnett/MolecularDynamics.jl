@@ -4,15 +4,14 @@ MolecularDynamics
 James W. Barnett
 jbarnet4@tulane.edu
 
-These are some utilities for the reading in and analysis of [Gromacs](http://www.gromacs.org)
-output file formats with the [Julia](http://www.julialang.org) language. This is for use after a Gromacs
-simulation has been performed. Several modules are included.
+"MolecularDynamics" is a Julia package for the reading in and analysis of [Gromacs](http://www.gromacs.org)
+simulations. Several modules are included:
 
-*  Gmx - the main module. Combine Xtc and Ndx functions to be able to read in an xtc file into an
+*  Gmx - the main file processing module. Combines Xtc and Ndx functions to be able to read in an xtc file into an
    array for processing.
-*  Xtc - read in xtc files.
-*  Ndx - read in ndx files.
-*  Utils - some analytical functions.
+*  Utils - the main analysis module
+*  Xtc - reads in xtc files.
+*  Ndx - reads in ndx files.
 
 Note that this is a work in progress and probably contains a few bugs. Please
 check it out and give me some feedback.
