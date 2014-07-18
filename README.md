@@ -5,7 +5,7 @@ James W. Barnett
 jbarnet4@tulane.edu
 
 "MolecularDynamics" is a [Julia](http://www.julialang.org) package for the 
-reading in and analysis of [Gromacs](http://www.gromacs.org)
+reading in and analysis of [Gromacs](http://www.gromacs.org) Molecular Dynamics
 simulations. The goal is to provide a small and simple framework for simulation analysis.
 This project does not intend to provide every analytical tool possible, but
 instead intends to give a foundation for writing analysis software, making it
