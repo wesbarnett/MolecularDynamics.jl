@@ -114,7 +114,7 @@ end
 
 function dih_angle(a::Array{Float32,2},box::Array{Float32,2})
 
-	angle::Float64[]
+	angle = Float64[]
 
 	for i in 1:size(a,2)-3
 
