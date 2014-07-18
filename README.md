@@ -47,7 +47,7 @@ To start using the package do the following:
 
     julia> using MolecularDynamics
 
-Example Usages
+Example Usage
 --------------
 
 ###Reading in files
