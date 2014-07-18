@@ -340,7 +340,7 @@ Some basic functions are included in the Utils module. These include adjusting
 for the periodic boundary condition (pbc), calculating bond angles
 (bond_angle), and calculating dihedral angles (dih_angle).
 
-###Periodic Boundary Condition
+####Periodic Boundary Condition
 Use "pbc", Let's say you're interested in getting the distance between two atoms:
 
     julia> atom1 = g.x["C"][1][:,1]
