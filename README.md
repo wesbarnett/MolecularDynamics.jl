@@ -548,4 +548,5 @@ Now to plot the histogram:
 
     julia> histogram(a[1,:],"bins",360,"xlabel","Angle","ylabel","P","norm",1,"xrange","[0:360]","title","Dihedral Angle Distribution")
 
-!["Dihedral angle distribution"](images/dih-hist.png)
+!["Dihedral angle
+distribution"](https://raw.githubusercontent.com/wesbarnett/MolecularDynamics.jl/master/images/dih-hist.png)
