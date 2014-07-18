@@ -65,11 +65,30 @@ function read_ndx(filename::String)
             K += 1
             line = readline(f)
             locs = Int[]
+            read6 = false
         # Populate the locs array for the dictionary
         else
             line_array = readline(f)
-            for J in 5:5:length(line_array)
-                push!(locs,parseint(Int,line_array[J-4:J]))
+            if ~read6
+                for J in 5:5:length(line_array)
+                    number = parseint(Int,line_array[J-4:J])
+                    push!(locs,number)
+                    # if a number is five digits switch how we read for the rest of
+                    # the line
+                    if ndigits(number == 5)
+                        for K in J:6:length(line_array)
+                            read6 = true
+                            number = parseint(Int,line_array[J-4:J])
+                            push!(locs,number)
+                        end
+                        break
+                    end
+                end
+            else
+                for J in 6:6:length(line_array)
+                    number = parseint(Int,line_array[J-4:J])
+                    push!(locs,number)
+                end
             end
         end
 
