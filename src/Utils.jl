@@ -7,7 +7,8 @@ module Utils
 
 export pbc, 
        dih_angle,
-	   bond_angle
+	   bond_angle,
+       rdf
 
 # Adjusts for periodic boundary condition. Input is a three-dimensional
 # vector (the position) and the box ( 3 x 3 Array). A 3d vector is returned.
@@ -178,9 +179,93 @@ function box_vol(box::Array{Float32,3})
            box[1,3] * box[2,1] * box[3,2] - 
            box[1,3] * box[2,2] * box[3,1] +
            box[1,2] * box[2,1] * box[3,3] +
-           box[1,1] * box[2,3] * box[3,2] 
+           box[1,1] * box[2,3] * box[3,2] )
 
     return vol
+
+end
+
+function bin_rdf(g,atom_i,atom_j,box,nbins::Int,bin_width::Float64,r_excl2::Float64)
+
+    dx = atom_i - atom_j
+    dx = pbc(float32(dx),box)
+    r2 = dot(dx,dx)
+    if (r2 > r_excl2) then
+        ig = int(ceil(sqrt(r2)/bin_width))
+        if ig <= nbins
+            g[ig] += 1.0
+        end
+    end
+
+    return g
+
+end 
+
+function normalize_rdf(g,gmx,nbins::Int,bin_width::Float64,group1::String,group2::String)
+
+    bin_vols = zeros(Float64, nbins)
+    for i in 1:nbins
+        r = float(i)  + 0.5
+        bin_vol = r^3 - (r-1.0)^3
+        bin_vol *= 4.0/3.0 * pi * (bin_width)^3 
+		# TODO: only works if we have a constant volume with a cubic box
+        g[i] *= float64(gmx.box[1][1,1] * gmx.box[1][2,2] * gmx.box[1][3,3]) / ( gmx.natoms[group1] * gmx.natoms[group2] * bin_vol * gmx.no_frames) 
+    end
+
+    bin = Array(Float64,size(g,1))
+
+    for i in 1:size(g,1)
+        bin[i] = float(i) * bin_width
+    end
+
+    return bin,g
+
+end
+
+function do_rdf_binning(g,gmx,nbins::Int,bin_width::Float64,r_excl2::Float64,group1::String,group2::String)
+
+    for frame in 1:gmx.no_frames
+
+        if frame % 1000 == 0
+		    print(char(13),"Binning frame: ",frame)
+        end
+
+        for i in 1:gmx.natoms[group1]
+
+            atom_i = gmx.x[group1][frame][:,i]
+
+            for j in 1:gmx.natoms[group2]
+
+                atom_j = gmx.x[group2][frame][:,j]
+
+                bin_rdf(g,atom_i,atom_j,gmx.box[frame],nbins,bin_width,r_excl2)
+
+            end
+
+        end
+
+    end 
+
+    return g
+
+end
+
+# TODO: this is only for a constant volume cubic box
+function rdf(gmx,group1::String,group2::String,bin_width=0.002::Float64,r_excl=0.1::Float64)
+
+    println("WARNING: this function only works for a constant volume cubic box.")
+    r_excl2 = r_excl^2
+
+    nbins =  iround( gmx.box[1][1,1] / (2.0 * bin_width) )
+
+    g = zeros(Float64,nbins)
+
+    g = do_rdf_binning(g,gmx,nbins,bin_width,r_excl2,group1,group2)
+
+    println(char(13),"Binning complete.        ")
+    g = normalize_rdf(g,gmx,nbins,bin_width,group1,group2)
+
+    return g
 
 end
 
