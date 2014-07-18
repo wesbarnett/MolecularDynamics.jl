@@ -333,12 +333,65 @@ Some basic functions are included in the Utils module. These include adjusting
 for the periodic boundary condition (pbc), calculating bond angles
 (bond_angle), and calculating dihedral angles (dih_angle).
 
+####Bond Angles
+Use "bond_angle". There are several different methods, all of which return
+angles in radians:
+
+Using the coordinate of three atoms that form an angle:
+
+    julia> angle = bond_angle(g.x["C"][1][:,1],
+                              g.x["C"][1][:,2],
+                              g.x["C"][1][:,3],
+                              g.box[1])
+    2.082081985142061
+
+Getting all the bond angles of an index group (like a linear alkane) for a
+single frame:
+
+    julia> angle = bond_angle(g.x["C"][1],g.box[1])
+    6-element Array{Float64,1}:
+     2.08208
+     1.93741
+     2.01737
+     1.87734
+     2.02827
+     2.01592
+
+Getting all the angles of an index group for all frames (in this case octane
+using only four frames):
+
+    julia> angle = bond_angle(g.x["C"],g.box)
+    6x4 Array{Float64,2}:
+     2.08208  2.03211  1.96856  1.86377
+     1.93741  1.92178  2.01451  1.92411
+     2.01737  2.04895  1.93338  1.98445
+     1.87734  1.98397  2.00395  1.8616 
+     2.02827  2.00471  2.03594  2.04358
+     2.01592  1.9744   1.83227  2.0012 
+
+And here is the first angle for all of the frames from this:
+
+    julia> angle[1,:]
+    1x4 Array{Float64,2}:
+     2.08208  2.03211  1.96856  1.86377
+
+Here are all of the angles for the first frame:
+
+    julia> angle[:,1]
+    6-element Array{Float64,1}:
+     2.08208
+     1.93741
+     2.01737
+     1.87734
+     2.02827
+     2.01592
+
 ####Dihedral Angles
 Use the "dih_angle" function to calculate dihedral angles. There are several
 methods. For now here are a few examples. Note that the dihedral angle is
 returned in radians. 
 
-Example using the coordinates of four atoms making up the angle:
+Using the coordinates of four atoms making up the angle:
 
     julia> angle = dih_angle(g.x["C"][1][:,1],
                          g.x["C"][1][:,2],
@@ -347,7 +400,8 @@ Example using the coordinates of four atoms making up the angle:
                          g.box[1])
     -1.384181494375928
 
-Example (one frame of all carbons in octane):
+Using one frame to return all angles in a sequence (in this case all the angles
+in octane):
 
     julia> g.x["C"][1]
     3x8 Array{Float32,2}:
@@ -363,8 +417,8 @@ Example (one frame of all carbons in octane):
      -2.4199 
       2.8746 
 
-Example (all frames of all carbons in octane - in this case I only read in the
-first four frames into "g" using "read_gmx"):
+Using all frames to get all angles (in this case all frames of all carbons in octane;
+I only read in the first four frames into "g" using "read_gmx"):
 
     julia> angle = dih_angle(g.x["C"],g.box)
     5x4 Array{Float64,2}:
