@@ -69,7 +69,7 @@ function bond_angle(a::Array{Float32,2},box::Array{Float32,2})
 
 	for i in 1:size(a,2)-2
 
-		angle = push!(angle,dih_angle(a[:,i],a[:,i+1],a[:,i+2],box))
+		angle = push!(angle,bond_angle(a[:,i],a[:,i+1],a[:,i+2],box))
 
 	end
 
