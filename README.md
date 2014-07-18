@@ -496,3 +496,37 @@ All angles in the first frame:
      -2.4199 
       2.8746 
 
+###Using Other Packages
+#### Dihedral Angle Distribution
+As an example on how to use another package to help analyze some data, you could
+use the Gadfly package to plot a histogram of the dihedral angles of a molecule. For example,
+here is the distribution of the first dihedral angle in octane from 15,000 frames:
+
+    julia> using MolecularDynamics.Gmx
+
+    julia> using MolecularDynamics.Utils
+
+    julia> g = read_gmx("/home/james/testing/2_prd_313.xtc","/home/james/testing/index.ndx","C");
+    First frame to save: 1
+    Last frame to save: 100000
+    Saving every frame.
+    Initializing /home/james/testing/2_prd_313.xtc
+    No. of atoms = 16494
+    Saving the following index groups:
+      C (8 elements)
+    Saved 15001 frames.0
+
+    julia> a = dih_angle(g.x["C"],g.box)
+
+This just shifts everything below 0 to be from pi to 2pi. Then it changes it all
+to degrees.
+
+    julia> a = map((x) -> if(x < 0.0) x += 2pi else x = x end, a)
+
+    julia> a = map((x) -> x * 180.0/pi, a)
+
+Now to plot it and save it as an image:
+
+    julia> using Gadfly
+
+
