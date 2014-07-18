@@ -345,6 +345,14 @@ Using the coordinate of three atoms that form an angle:
                               g.box[1])
     2.082081985142061
 
+Note that I'm just passing xyz coordinates as the first three arguments:
+
+    julia> g.x["C"][1][:,1]
+    3-element Array{Float32,1}:
+     0.443
+     4.49 
+     3.818
+
 Getting all the bond angles of an index group (like a linear alkane) for a
 single frame:
 
