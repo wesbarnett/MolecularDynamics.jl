@@ -171,4 +171,17 @@ function dih_angle(f::Array{Any,1},box::Array{Any,1})
 
 end
 
+function box_vol(box::Array{Float32,3})
+
+    vol = (box[1,1] * box[2,2] * box[3,3] +
+           box[1,2] * box[2,3] * box[3,1] +
+           box[1,3] * box[2,1] * box[3,2] - 
+           box[1,3] * box[2,2] * box[3,1] +
+           box[1,2] * box[2,1] * box[3,3] +
+           box[1,1] * box[2,3] * box[3,2] 
+
+    return vol
+
+end
+
 end
