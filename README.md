@@ -333,6 +333,43 @@ Some basic functions are included in the Utils module. These include adjusting
 for the periodic boundary condition (pbc), calculating bond angles
 (bond_angle), and calculating dihedral angles (dih_angle).
 
+###Periodic Boundary Condition
+Use "pbc", Let's say you're interested in getting the distance between two atoms:
+
+    julia> atom1 = g.x["C"][1][:,1]
+    3-element Array{Float32,1}:
+     0.443
+     4.49 
+     3.818
+
+    julia> atom2 = g.x["OW"][1][:,1]
+    3-element Array{Float32,1}:
+     3.273
+     0.392
+     2.835
+
+Here is the vector between these atoms:
+
+    julia> a = atom1 - atom2
+    3-element Array{Float32,1}:
+     -2.83 
+      4.098
+      0.983
+
+Now to adjust for the periodic boundary condition. Note I'm using the box from
+the same frame as the coordinates above.
+
+    julia> a = pbc(a,g.box[1])
+    3-element Array{Float64,1}:
+      2.1698  
+     -0.901803
+      0.983   
+
+The magnitude is the distance:
+
+    julia> sqrt(dot(a,a))
+    2.547073301335343
+
 ####Bond Angles
 Use "bond_angle". There are several different methods, all of which return
 angles in radians:
