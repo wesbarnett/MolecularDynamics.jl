@@ -329,4 +329,6 @@ As I stated earlier, some of these functions would be much more of use in a
 script, so check out the examples.
 
 #Analysis
-Some basic functions are included. These include 
+Some basic functions are included in the Utils module. These include adjusting
+for the periodic boundary condition (pbc), calculating bond angles
+(bond_angle), and calculating dihedral angles (dih_angle).
