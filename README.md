@@ -48,7 +48,7 @@ To use a specific module do "using" for that module. For example, for Gmx do:
 Example Usages
 --------------
 
-#Reading in files
+##Reading in files
 
 Here are a few ways to use these modules in the REPL. Any of these functions can
 be put into a script. Some examples are in the "examples" directory, including a
@@ -328,7 +328,7 @@ These are the coordinates of just the "C" group from this frame:
 As I stated earlier, some of these functions would be much more of use in a
 script, so check out the examples.
 
-#Analysis
+###Analysis
 Some basic functions are included in the Utils module. These include adjusting
 for the periodic boundary condition (pbc), calculating bond angles
 (bond_angle), and calculating dihedral angles (dih_angle).
