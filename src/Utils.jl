@@ -113,7 +113,15 @@ end
 
 function dih_angle(a::Array{Float32,2},box::Array{Float32,2})
 
-    return dih_angle(a[:,1],a[:,2],a[:,3],a[:,4],box)
+	angle::Float64[]
+
+	for i in 1:size(a,2)-3
+
+		angle = push!(dih_angle(a[:,i],a[:,i+1],a[:,i+2],a[:,i+3],box))
+
+	end
+
+	return angle
 
 end
 
