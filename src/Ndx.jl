@@ -75,10 +75,10 @@ function read_ndx(filename::String)
                     push!(locs,number)
                     # if a number is five digits switch how we read for the rest of
                     # the line
-                    if ndigits(number == 5)
-                        for K in J:6:length(line_array)
+                    if ndigits(number) == 5
+                        for L in J+6:6:length(line_array)
                             read6 = true
-                            number = parseint(Int,line_array[J-4:J])
+                            number = parseint(Int,line_array[L-5:L])
                             push!(locs,number)
                         end
                         break
@@ -86,7 +86,7 @@ function read_ndx(filename::String)
                 end
             else
                 for J in 6:6:length(line_array)
-                    number = parseint(Int,line_array[J-4:J])
+                    number = parseint(Int,line_array[J-5:J])
                     push!(locs,number)
                 end
             end
