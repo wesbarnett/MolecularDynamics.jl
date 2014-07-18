@@ -499,8 +499,7 @@ All angles in the first frame:
 ###Using Other Packages
 #### Dihedral Angle Distribution
 As an example on how to use another package to help analyze some data, you could
-use the Gadfly package to plot a histogram of the dihedral angles of a molecule. For example,
-here is the distribution of the first dihedral angle in octane from 15,000 frames:
+use the Gaston package to plot a histogram of the dihedral angles of a molecule. For example, here is the distribution of the first dihedral angle of octane in water from 15,000 frames. The simulation was done at 313 K for 30 ns.
 
     julia> using MolecularDynamics.Gmx
 
@@ -518,15 +517,35 @@ here is the distribution of the first dihedral angle in octane from 15,000 frame
 
     julia> a = dih_angle(g.x["C"],g.box);
 
-This just shifts everything below 0 to be from pi to 2pi. Then it changes it all
-to degrees.
+This just shifts everything below 0 to be from pi to 2pi:
 
     julia> a = map((x) -> if(x < 0.0) x += 2pi else x = x end, a);
 
+Change from radians to degrees:
+
     julia> a = map((x) -> x * 180.0/pi, a);
 
-Now to plot it and save it as an image:
+Mean, median, and standard deviation of first angle (included in Standard
+Library, so no need to add additional packages):
 
-    julia> using Gadfly
+    julia> mean(a[1,:])
+    178.6874196135438
 
+    julia> std(a[1,:])
+    81.85275442240655
 
+    julia> median(a[1,:])
+    179.43239148502255
+
+Install Gaston if you don't already have it:
+
+    julia> Pkg.add("Gaston")
+
+You'll also need gnuplot installed.
+Now to plot the histogram:
+
+    julia> using Gaston
+
+    julia> histogram(a[1,:],"bins",360,"xlabel","Angle","ylabel","P","norm",1,"xrange","[0:360]","title","Dihedral Angle Distribution")
+
+    ![Dihedral angle distribution](images/dih-hist.png)
