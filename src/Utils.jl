@@ -112,7 +112,7 @@ function dih_angle(i::Array{Float32,1}, j::Array{Float32,1},
 
 end
 
-function dih_angle(a::Array{Float32,2},box::Array{Float32,2})
+function dih_angle(a::Array{Any,1},box::Array{Float32,2})
 
 	angle = Float64[]
 
@@ -125,5 +125,6 @@ function dih_angle(a::Array{Float32,2},box::Array{Float32,2})
 	return angle
 
 end
+
 
 end
