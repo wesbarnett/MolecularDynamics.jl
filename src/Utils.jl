@@ -382,11 +382,17 @@ function do_prox_rdf_binning(g,gmx,nbins::Int,bin_width::Float64,r_excl2::Float6
 
     for l in 1:nbins
 
-        g[i] = g_tmp[i] / (gmx.no_frames * gmx.natoms[group1] * gmx.natoms[group2])
+        g[l] = g_tmp[l] / (gmx.no_frames * gmx.natoms[group1] * gmx.natoms[group2])
 
     end
 
-    return g
+    bin = Array(Float64,size(g,1))
+
+    for i in 1:size(g,1)
+        bin[i] = float(i) * bin_width
+    end
+
+    return bin,g
 
 end
 
