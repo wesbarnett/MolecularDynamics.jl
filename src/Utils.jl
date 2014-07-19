@@ -275,10 +275,67 @@ function rdf(gmx,group1:String,bin_width=0.002::Float64,r_excl=0.1::Float64)
 end
 
 #=
-    Proximal radial distribution functions
+    Proximal radial distribution function functions
 =#
 
+function calc_prox_vol(gmx,nbins::Int,bin_width::Float64,group1::String,frame:Int)
+
+    nrands = 1000
+    nsites = gmx.natoms[group1]
+    tot_points = nrands * nsites
+    test_mag = Array(Float64,nsites)
+
+    for bin in 1:nbins
+
+        point_count = 0
+
+        for site in 1:nsites
+
+            for i in 1:nrands
+
+                # Generate a random point
+                myrand = rand(3)
+                theta = myrand[1] * pi
+                phi = myrand[2] * 2.0 * pi
+                r = myrand[3] * bin_width * (bin-1.0) * bin_width
+                x = r * sin(theta) * cos(phi)
+                y = r * sin(theta) * sin(phi)
+                z = r * cos(theta)
+                point = [x, y, z]
+
+                # Is it closest to the site of interest?
+
+                for j in 1:nsites
+
+                    test_vect = point - gmx.x[frame][:,j]
+                    test_vect = pbc(test_vect,gmx.box[frame])
+                    test_mag[j] = sqrt(dot(test_vect,test_vect))
+
+                end
+
+                if indmin(test_mag) == site
+                    point_count += 1
+                end
+
+            end
+
+        end
+
+        r = float64(bin) + 0.50
+        bin_vols[bin] = r^3 - (r-1.0)^3
+        bin_vols[bin] *= 4.0/3.0 * pi * bin_width^3 *
+        bin_vols[bin] *= float64(point_count / tot_points)
+
+    end
+
+    return bin_vols
+
+end
+
 function do_prox_rdf_binning(g,gmx,nbins::Int,bin_width::Float64,r_excl2::Float64,group1::String,group2::String)
+
+    g_tmp = Array(Float64,nbins)
+    g_tmp = 0.0
 
     for frame in 1:gmx.no_frames
 
@@ -305,9 +362,22 @@ function do_prox_rdf_binning(g,gmx,nbins::Int,bin_width::Float64,r_excl2::Float6
 
         vol = box_vol(gmx.box)
 
-        calc_prox_vol()
+        bin_vols = calc_prox_vol(gmx,nbins,bin_width,group1,frame)
+
+        for k in 1:nbins
+
+            g_tmp[k] += g[k] * vol / bin_vols[k]
+            g[k] = 0.0
+
+        end
 
     end 
+
+    for l in 1:nbins
+
+        g[i] = g_tmp[i] / (gmx.no_frames * gmx.natoms[group1] * gmx.natoms[group2])
+
+    end
 
     return g
 
