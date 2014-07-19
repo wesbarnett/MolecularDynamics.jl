@@ -412,3 +412,5 @@ function prox_rdf(gmx,group1::String,group2::String,bin_width=0.002::Float64,r_e
     return g
 
 end
+
+end
