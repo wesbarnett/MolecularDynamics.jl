@@ -276,7 +276,7 @@ function rdf(gmx,group1::String,group2::String,bin_width=0.002::Float64,r_excl=0
 
 end
 
-function rdf(gmx,group1:String,bin_width=0.002::Float64,r_excl=0.1::Float64)
+function rdf(gmx,group1::String,bin_width=0.002::Float64,r_excl=0.1::Float64)
 
     g = rdf(gmx,group1,group1,bin_width,r_excl)
 
