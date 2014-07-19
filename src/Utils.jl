@@ -287,13 +287,13 @@ end
 #=
     Proximal radial distribution function functions
 =#
-
 function calc_prox_vol(gmx,nbins::Int,bin_width::Float64,group1::String,frame::Int)
 
     nrands = 1000
     nsites = gmx.natoms[group1]
     tot_points = nrands * nsites
     test_mag = Array(Float64,nsites)
+    bin_vols = Array(Float64,nbins)
 
     for bin in 1:nbins
 
@@ -331,15 +331,14 @@ function calc_prox_vol(gmx,nbins::Int,bin_width::Float64,group1::String,frame::I
 
         end
 
-        r = float64(bin) + 0.50
+        r = float(bin) + 0.50
         bin_vols[bin] = r^3 - (r-1.0)^3
-        bin_vols[bin] *= 4.0/3.0 * pi * bin_width^3 *
-        bin_vols[bin] *= float64(point_count / tot_points)
+        bin_vols[bin] *= 4.0/3.0 * pi * bin_width^3
+        bin_vols[bin] *= float(point_count / tot_points)
 
     end
 
     return bin_vols
-
 end
 
 function do_prox_rdf_binning(g,gmx,nbins::Int,bin_width::Float64,r_excl2::Float64,group1::String,group2::String)
