@@ -8,7 +8,8 @@ module Utils
 export pbc, 
        dih_angle,
 	   bond_angle,
-       rdf
+       rdf,
+	   box_vol
 
 # Adjusts for periodic boundary condition. Input is a three-dimensional
 # vector (the position) and the box ( 3 x 3 Array). A 3d vector is returned.
@@ -172,9 +173,18 @@ function dih_angle(f::Array{Any,1},box::Array{Any,1})
 
 end
 
-#= 
-    Radial distribution function functions
-=#
+function box_vol(box::Array{Float32,2})
+
+    vol = (box[1,1] * box[2,2] * box[3,3] +
+           box[1,2] * box[2,3] * box[3,1] +
+           box[1,3] * box[2,1] * box[3,2] - 
+           box[1,3] * box[2,2] * box[3,1] +
+           box[1,2] * box[2,1] * box[3,3] +
+           box[1,1] * box[2,3] * box[3,2] )
+
+    return vol
+
+end
 
 function bin_rdf(g,atom_i,atom_j,box,nbins::Int,bin_width::Float64,r_excl2::Float64)
 
