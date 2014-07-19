@@ -190,6 +190,11 @@ end
 
 function normalize_rdf(g,gmx,nbins::Int,bin_width::Float64,group1::String,group2::String)
 
+    # If we are doing an rdf on one group, adjust for this
+    if group1 == group2
+        gmx.natoms[group1] -= 1
+    end
+
     bin_vols = zeros(Float64, nbins)
     for i in 1:nbins
         r = float(i)  + 0.5
@@ -255,5 +260,11 @@ function rdf(gmx,group1::String,group2::String,bin_width=0.002::Float64,r_excl=0
     return g
 
 end
+
+function rdf(gmx,group1:String,bin_width=0.002::Float64,r_excl=0.1::Float64)
+
+    g = rdf(gmx,group1,group1,bin_width,r_excl)
+
+    return g
 
 end
