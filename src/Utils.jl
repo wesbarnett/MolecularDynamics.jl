@@ -9,6 +9,7 @@ export pbc,
        dih_angle,
 	   bond_angle,
        rdf,
+       prox_rdf,
 	   box_vol
 
 # Adjusts for periodic boundary condition. Input is a three-dimensional
@@ -317,8 +318,8 @@ function calc_prox_vol(gmx,nbins::Int,bin_width::Float64,group1::String,frame::I
 
                 for j in 1:nsites
 
-                    test_vect = point - gmx.x[frame][:,j]
-                    test_vect = pbc(test_vect,gmx.box[frame])
+                    test_vect = point - gmx.x[group1][frame][:,j]
+                    test_vect = pbc(float32(test_vect),gmx.box[frame])
                     test_mag[j] = sqrt(dot(test_vect,test_vect))
 
                 end
@@ -369,7 +370,7 @@ function do_prox_rdf_binning(g,gmx,nbins::Int,bin_width::Float64,r_excl2::Float6
         # Calculate the volume of the entire box and then calculate the volume
         # of the proximal shell. We effectively are normalizing during the loop.
 
-        vol = box_vol(gmx.box)
+        vol = box_vol(gmx.box[frame])
 
         bin_vols = calc_prox_vol(gmx,nbins,bin_width,group1,frame)
 
@@ -406,7 +407,6 @@ function prox_rdf(gmx,group1::String,group2::String,bin_width=0.002::Float64,r_e
     g = do_prox_rdf_binning(g,gmx,nbins,bin_width,r_excl2,group1,group2)
 
     println(char(13),"Binning complete.        ")
-    g = normalize_rdf(g,gmx,nbins,bin_width,group1,group2)
 
     return g
 

@@ -8,7 +8,7 @@ include("Utils.jl")
 import .Xtc: xtc_init, read_xtc, close_xtc
 import .Ndx: read_ndx
 import .Gmx: read_gmx
-import .Utils: pbc, bond_angle, dih_angle, rdf, box_vol
+import .Utils: pbc, bond_angle, dih_angle, rdf, prox_rdf, box_vol
 
 export read_gmx, 
 	   xtc_init, 
@@ -18,5 +18,7 @@ export read_gmx,
 	   pbc,
 	   bond_angle,
 	   dih_angle,
-       rdf
+       box_vol,
+       rdf,
+       prox_rdf
 end
