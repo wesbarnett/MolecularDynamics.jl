@@ -172,6 +172,10 @@ function dih_angle(f::Array{Any,1},box::Array{Any,1})
 
 end
 
+#= 
+    Radial distribution function functions
+=#
+
 function bin_rdf(g,atom_i,atom_j,box,nbins::Int,bin_width::Float64,r_excl2::Float64)
 
     dx = atom_i - atom_j
@@ -242,6 +246,7 @@ function do_rdf_binning(g,gmx,nbins::Int,bin_width::Float64,r_excl2::Float64,gro
 
 end
 
+# Radial distribution function
 # TODO: this is only for a constant volume cubic box
 function rdf(gmx,group1::String,group2::String,bin_width=0.002::Float64,r_excl=0.1::Float64)
 
@@ -264,6 +269,65 @@ end
 function rdf(gmx,group1:String,bin_width=0.002::Float64,r_excl=0.1::Float64)
 
     g = rdf(gmx,group1,group1,bin_width,r_excl)
+
+    return g
+
+end
+
+#=
+    Proximal radial distribution functions
+=#
+
+function do_prox_rdf_binning(g,gmx,nbins::Int,bin_width::Float64,r_excl2::Float64,group1::String,group2::String)
+
+    for frame in 1:gmx.no_frames
+
+        if frame % 1000 == 0
+		    print(char(13),"Binning frame: ",frame)
+        end
+
+        for i in 1:gmx.natoms[group1]
+
+            atom_i = gmx.x[group1][frame][:,i]
+
+            for j in 1:gmx.natoms[group2]
+
+                atom_j = gmx.x[group2][frame][:,j]
+
+                bin_rdf(g,atom_i,atom_j,gmx.box[frame],nbins,bin_width,r_excl2)
+
+            end
+
+        end
+
+        # Calculate the volume of the entire box and then calculate the volume
+        # of the proximal shell. We effectively are normalizing during the loop.
+
+        vol = box_vol(gmx.box)
+
+        calc_prox_vol()
+
+    end 
+
+    return g
+
+end
+
+# Proximal radial distribution function
+# TODO: this is only for a constant volume cubic box
+function prox_rdf(gmx,group1::String,group2::String,bin_width=0.002::Float64,r_excl=0.1::Float64)
+
+    println("WARNING: this function only works for a constant volume cubic box.")
+    r_excl2 = r_excl^2
+
+    nbins =  iround( gmx.box[1][1,1] / (2.0 * bin_width) )
+
+    g = zeros(Float64,nbins)
+
+    g = do_prox_rdf_binning(g,gmx,nbins,bin_width,r_excl2,group1,group2)
+
+    println(char(13),"Binning complete.        ")
+    g = normalize_rdf(g,gmx,nbins,bin_width,group1,group2)
 
     return g
 
