@@ -290,7 +290,7 @@ end
 =#
 function calc_prox_vol(gmx,nbins::Int,bin_width::Float64,group1::String,frame::Int)
 
-    nrands = 1000
+    nrands = 100
     nsites = gmx.natoms[group1]
     tot_points = nrands * nsites
     test_mag = Array(Float64,nsites)
@@ -344,14 +344,11 @@ end
 
 function do_prox_rdf_binning(g,gmx,nbins::Int,bin_width::Float64,r_excl2::Float64,group1::String,group2::String)
 
-    g_tmp = Array(Float64,nbins)
-    g_tmp = 0.0
+    g_tmp = zeros(Float64,nbins)
 
     for frame in 1:gmx.no_frames
 
-        if frame % 1000 == 0
-		    print(char(13),"Binning frame: ",frame)
-        end
+	    print(char(13),"Binning frame: ",frame)
 
         for i in 1:gmx.natoms[group1]
 
