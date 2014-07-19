@@ -288,7 +288,7 @@ end
     Proximal radial distribution function functions
 =#
 
-function calc_prox_vol(gmx,nbins::Int,bin_width::Float64,group1::String,frame:Int)
+function calc_prox_vol(gmx,nbins::Int,bin_width::Float64,group1::String,frame::Int)
 
     nrands = 1000
     nsites = gmx.natoms[group1]
