@@ -17,6 +17,6 @@ export read_gmx,
 	   read_ndx,
 	   pbc,
 	   bond_angle,
-	   dih_angle
-
+	   dih_angle,
+       rdf
 end
