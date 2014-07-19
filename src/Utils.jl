@@ -8,7 +8,8 @@ module Utils
 export pbc, 
        dih_angle,
 	   bond_angle,
-       rdf
+       rdf,
+	   box_vol
 
 # Adjusts for periodic boundary condition. Input is a three-dimensional
 # vector (the position) and the box ( 3 x 3 Array). A 3d vector is returned.
