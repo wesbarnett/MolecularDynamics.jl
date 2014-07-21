@@ -9,8 +9,7 @@
 # the directory containing this module to the JULIA_LOAD_PATH environmental
 # variable.
 
-using MolecularDynamicsAnalysis
-using MolecularDynamicsAnalysis.Gmx
+using MolecularDynamics
 using ArgParse
 
 function parse_commandline()
