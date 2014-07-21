@@ -17,7 +17,7 @@ before_install:
 script:
     - julia -e 'versioninfo(); Pkg.init(); Pkg.clone(pwd());'
     - wget ftp://ftp.gromacs.org/pub/contrib/xdrfile-1.1.1.tar.gz
-    - tar xvzf xdrfile-1.1.1
+    - tar xvzf xdrfile-1.1.1.tar.gz
     - cd xdrfile-1.1.1
     - ./configure --enable-shared
     - make
