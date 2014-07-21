@@ -17,5 +17,5 @@ before_install:
     - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
 script:
     - julia -e 'versioninfo(); Pkg.init(); Pkg.clone(pwd());'
-    - ./test/install_libxdrfile
+    - ./test/install_lxdrfile
     - julia test/read_test.jl
