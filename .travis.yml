@@ -1,21 +1,24 @@
 language: cpp
 compiler:
     - gcc
+branches:
+    only:
+    - develop
 notifications:
     email: false
-    before_install:
-        - sudo add-apt-repository ppa:staticfloat/julia-deps -y
-        - sudo add-apt-repository ppa:staticfloat/julianightlies -y
-        - sudo apt-get update -qq -y
-        - sudo apt-get install git libpcre3-dev julia -y
-        - git config --global user.name "Travis User"
-        - git config --global user.email "travis@example.net"
-        - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-    script:
-        - julia -e 'versioninfo(); Pkg.init(); Pkg.clone(pwd());'
-        - wget ftp://ftp.gromacs.org/pub/contrib/xdrfile-1.1.1.tar.gz
-        - tar xvzf xdrfile-1.1.1
-        - cd xdrfile-1.1.1
-        - ./configure --enable-shared
-        - make
-        - make install
+before_install:
+    - sudo add-apt-repository ppa:staticfloat/julia-deps -y
+    - sudo add-apt-repository ppa:staticfloat/julianightlies -y
+    - sudo apt-get update -qq -y
+    - sudo apt-get install git libpcre3-dev julia -y
+    - git config --global user.name "Travis User"
+    - git config --global user.email "travis@example.net"
+    - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
+script:
+    - julia -e 'versioninfo(); Pkg.init(); Pkg.clone(pwd());'
+    - wget ftp://ftp.gromacs.org/pub/contrib/xdrfile-1.1.1.tar.gz
+    - tar xvzf xdrfile-1.1.1
+    - cd xdrfile-1.1.1
+    - ./configure --enable-shared
+    - make
+    - make install
