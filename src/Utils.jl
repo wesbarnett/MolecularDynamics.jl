@@ -193,7 +193,7 @@ function bin_rdf(g,atom_i,atom_j,box,nbins::Int,bin_width::Float64,r_excl2::Floa
     dx = pbc(float32(dx),box)
     r2 = dot(dx,dx)
     if (r2 > r_excl2) then
-        ig = int(ceil(sqrt(r2)/bin_width))
+        ig = iround(ceil(sqrt(r2)/bin_width))
         if ig <= nbins
             g[ig] += 1.0
         end
@@ -205,19 +205,17 @@ end
 
 function normalize_rdf(g,gmx,nbins::Int,bin_width::Float64,group1::String,group2::String)
 
-    # If we are doing an rdf on one group, adjust for this
-    if group1 == group2
-        gmx.natoms[group1] -= 1
-        println("Groups are the same")
-    end
-
     bin_vols = zeros(Float64, nbins)
     for i in 1:nbins
         r = float(i)  + 0.5
         bin_vol = r^3 - (r-1.0)^3
         bin_vol *= 4.0/3.0 * pi * (bin_width)^3 
 		# TODO: only works if we have a constant volume with a cubic box
-        g[i] *= float64(gmx.box[1][1,1] * gmx.box[1][2,2] * gmx.box[1][3,3]) / ( gmx.natoms[group1] * gmx.natoms[group2] * bin_vol * gmx.no_frames) 
+        if group1 == group2
+            g[i] *= float64(box_vol(gmx.box[1])) / ( (gmx.natoms[group1] - 1) * gmx.natoms[group2] * bin_vol * gmx.no_frames) 
+        else
+            g[i] *= float64(box_vol(gmx.box[1])) / ( gmx.natoms[group1] * gmx.natoms[group2] * bin_vol * gmx.no_frames) 
+        end
     end
 
     bin = Array(Float64,size(g,1))
