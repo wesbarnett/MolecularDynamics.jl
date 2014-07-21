@@ -509,9 +509,10 @@ returned. To plot quickly you can use the "Gaston" package:
 
     julia> plot(g[1],g[2],"title","","xlabel","r (nm)","ylabel","g(r)")
 
-For the methane C - water O distribution it looks like:
+For the methane-methane radial distribution function from a simulation I did (10
+methanes in water), the result looks like this:
 
-!["Radial Distribution Function"](images/rdf.png)
+!["Radial Distribution Function"](https://raw.githubusercontent.com/wesbarnett/MolecularDynamics.jl/master/images/rdf.png)
 
 ###Using Other Packages
 #### Dihedral Angle Distribution
