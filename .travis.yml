@@ -17,12 +17,5 @@ before_install:
     - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
 script:
     - julia -e 'versioninfo(); Pkg.init(); Pkg.clone(pwd());'
-    - wget ftp://ftp.gromacs.org/pub/contrib/xdrfile-1.1.1.tar.gz
-    - tar xvzf xdrfile-1.1.1.tar.gz
-    - cd xdrfile-1.1.1
-    - ./configure --enable-shared --prefix=/home/travis/xdrfile
-    - export LD_LIBRARY_PATH=LD_LIBRARY_PATH:/home/travis/xdrfile/lib
-    - make
-    - make install
-    - cd ..
+    - ./test/install_libxdrfile
     - julia test/read_test.jl

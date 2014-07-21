@@ -1,0 +1,12 @@
+#!/bin/bash
+
+echo -e "Install lxdrfile..."
+wget ftp://ftp.gromacs.org/pub/contrib/xdrfile-1.1.1.tar.gz
+tar xvzf xdrfile-1.1.1.tar.gz
+cd xdrfile-1.1.1
+./configure --enable-shared --prefix=/home/travis/xdrfile
+export LD_LIBRARY_PATH=LD_LIBRARY_PATH:/home/travis/xdrfile/lib
+make
+make install
+cd ..
+echo -e "complete.\n"
