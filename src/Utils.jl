@@ -289,6 +289,8 @@ function do_prox_rdf_binning(g,gmx,nbins::Int,bin_width::Float64,r_excl2::Float6
     nsites = gmx.natoms[group1]
     test_vec = Array(Float64,3)
     test_mag = Array(Float64,nsites)
+    g_tmp = zeros(Float64,nbins)
+    bin_vols = Array(Float64,nbins)
 
     for frame in 1:gmx.no_frames
 
@@ -303,7 +305,6 @@ function do_prox_rdf_binning(g,gmx,nbins::Int,bin_width::Float64,r_excl2::Float6
             for j in 1:gmx.nsites
 
                 atom_j = gmx.x[group1][frame][:,j]
-
                 test_vec = atom_i - atom_j
                 test_vec = pbc(test_vec,gmx.box[frame])
                 test_mag[j] = sqrt(dot(test_vec,test_vec))
@@ -311,16 +312,77 @@ function do_prox_rdf_binning(g,gmx,nbins::Int,bin_width::Float64,r_excl2::Float6
             end
 
             site = indmin(test_mag)
-
             atom_j = gmx.x[group1][frame][:,site]
-
             bin_rdf(g,atom_i,atom_j,gmx.box[frame],nbins,bin_width,r_excl2)
 
         end
 
+        vol = box_vol(gmx.box[frame])
+        bin_vols = calc_prox_vol(g,gmx,frame)
+
+        g_tmp += g * vol / bin_vols + g_tmp
+        g = zeros(Float64,nbins)
+
     end 
 
+    g = g_tmp / (gmx.no_frames * gmx.natoms[group2] * nsites)
+
     return g
+
+end
+
+function calc_prox_vol(g,gmx,group1,frame)
+
+    nrand = 1000
+    nsites = gmx.natoms[group1]
+    tot_points = nrand * nsites
+
+    test_mag = Array(Float64,nsites)
+
+    do bin = 1, nbins
+
+        point_count = 0
+
+        do site = 1, nsites
+
+            do i = 1, nrand
+
+                myrand = rand(3)
+                theta = myrand[1] * pi
+                phi = myrand[2] * 2.0 * pi
+                r = myrand[3] * bin_width (float(bin)-1.0) * bin_width
+
+                x = r * sin(theta) * cos(phi)
+                y = r * sin(theta) * sin(phi)
+                z = r * cos(theta)
+
+                point = [x, y, z]
+
+                do j = 1, nsites
+
+                    test_vec = point - gmx.x[group1][frame]
+                    test_vec = pbc(test_vec,gmx.box[frame])
+                    test_mag(j) = sqrt(dot(test_vec,test_vec))
+
+                end
+
+                if (indmin(test_mag) == site)
+                    point_count += 1
+                end
+
+            end
+
+        end
+
+        r = float[bin] + 0.5
+        bin_vols[bin] = r^3 - (r-1.0)^3
+        bin_vols[bin] *= 4.0/3.0 * pi * (bin_width)^3
+
+        bin_vols[bin] *= ( float(point_count) / float(tot_points) )
+
+    end
+
+    return bin_vols
 
 end
 
