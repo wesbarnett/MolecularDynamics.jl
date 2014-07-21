@@ -1,6 +1,12 @@
 MolecularDynamics
 =================
 
+master:
+
+!["status"](https://travis-ci.org/wesbarnett/MolecularDynamics.jl.svg?branch=master)
+
+develop:
+
 !["status"](https://travis-ci.org/wesbarnett/MolecularDynamics.jl.svg?branch=develop)
 
 James W. Barnett
