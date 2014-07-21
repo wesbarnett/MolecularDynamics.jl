@@ -1,4 +1,6 @@
 
+using MolecularDynamics
+
 gmx = read_gmx("../examples/gmx-test/traj.xtc","../examples/gmx-test/index.ndx","C")
 
 if (gmx.x["C"][2][1,3] == 1.315 &
