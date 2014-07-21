@@ -339,13 +339,13 @@ function calc_prox_vol(g,gmx,group1,frame)
 
     test_mag = Array(Float64,nsites)
 
-    do bin = 1, nbins
+    for bin in 1:nbins
 
         point_count = 0
 
-        do site = 1, nsites
+        for site in 1:nsites
 
-            do i = 1, nrand
+            for i in 1:nrand
 
                 myrand = rand(3)
                 theta = myrand[1] * pi
@@ -358,7 +358,7 @@ function calc_prox_vol(g,gmx,group1,frame)
 
                 point = [x, y, z]
 
-                do j = 1, nsites
+                do j in 1:nsites
 
                     test_vec = point - gmx.x[group1][frame]
                     test_vec = pbc(test_vec,gmx.box[frame])
