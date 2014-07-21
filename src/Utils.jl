@@ -193,6 +193,7 @@ function normalize_rdf(g,gmx,nbins::Int,bin_width::Float64,group1::String,group2
     # If we are doing an rdf on one group, adjust for this
     if group1 == group2
         gmx.natoms[group1] -= 1
+        println("Groups are the same")
     end
 
     bin_vols = zeros(Float64, nbins)
