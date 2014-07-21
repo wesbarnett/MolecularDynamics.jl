@@ -1,7 +1,7 @@
 MolecularDynamics
 =================
 
-develop: !["status"](https://travis-ci.org/wesbarnett/MolecularDynamics.jl.svg?branch=develop)
+!["status"](https://travis-ci.org/wesbarnett/MolecularDynamics.jl.svg?branch=develop)
 
 James W. Barnett
 jbarnet4@tulane.edu
