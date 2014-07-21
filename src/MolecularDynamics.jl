@@ -1,10 +1,5 @@
 module MolecularDynamics
 
-include("Xtc.jl")
-include("Ndx.jl")
-include("Gmx.jl")
-include("Utils.jl")
-
 import .Xtc: xtc_init, read_xtc, close_xtc
 import .Ndx: read_ndx
 import .Gmx: read_gmx
@@ -21,4 +16,10 @@ export read_gmx,
        box_vol,
        rdf,
        prox_rdf
+
+include("Xtc.jl")
+include("Ndx.jl")
+include("Gmx.jl")
+include("Utils.jl")
+
 end
