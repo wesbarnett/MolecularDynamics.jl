@@ -35,17 +35,18 @@ configure the installation.
 Installation
 ------------
 
-This is an unregistered package. Open the REPL:
+Open the REPL:
 
     julia
 
-Now clone the package:
+Now add the package:
 
-    julia> Pkg.clone("MolecularDynamics")
+    julia> Pkg.add("MolecularDynamics")
 
 To start using the package do the following:
 
     julia> using MolecularDynamics
+
 
 Example Usage
 --------------
