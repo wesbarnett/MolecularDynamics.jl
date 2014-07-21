@@ -46,20 +46,6 @@ To start using the package do the following:
 
     julia> using MolecularDynamics
 
-
-Contributing
-------------
-
-Please feel free to contribute to this project by forking the source code and then 
-initiating pull requests. The development version of the project is in the branch "develop." Stable
-versions of the project are in the branch "master" and tagged with release
-numbers.
-
-A few tests are done to see if a build is passing. Here is the develop branch
-status:
-
-!["status"](https://travis-ci.org/wesbarnett/MolecularDynamics.jl.svg?branch=develop)
-
 Example Usage
 --------------
 
@@ -578,3 +564,16 @@ Now to plot the histogram:
 
 !["Dihedral angle
 distribution"](https://raw.githubusercontent.com/wesbarnett/MolecularDynamics.jl/master/images/dih.png)
+
+Contributing
+------------
+
+Please feel free to contribute to this project by forking the source code and then 
+initiating pull requests. The development version of the project is in the branch "develop." Stable
+versions of the project are in the branch "master" and tagged with release
+numbers.
+
+A few tests are done to see if a build is passing. Here is the develop branch
+status:
+
+!["status"](https://travis-ci.org/wesbarnett/MolecularDynamics.jl.svg?branch=develop)
