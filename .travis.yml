@@ -19,7 +19,7 @@ script:
     - wget ftp://ftp.gromacs.org/pub/contrib/xdrfile-1.1.1.tar.gz
     - tar xvzf xdrfile-1.1.1.tar.gz
     - cd xdrfile-1.1.1
-    - ./configure --enable-shared
+    - ./configure --enable-shared --prefix=/home/travis/xdrfile
     - make
     - make install
     - julia test/read_test.jl
