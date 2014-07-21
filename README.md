@@ -380,7 +380,7 @@ Note that I'm just passing xyz coordinates as the first three arguments:
      3.818
 
 Getting all the bond angles of an index group (like a linear alkane) for a
-single frame:
+single frame - note the two different methods:
 
     julia> angle = bond_angle(g.x["C"][1],g.box[1])
     6-element Array{Float64,1}:
@@ -391,10 +391,28 @@ single frame:
      2.02827
      2.01592
 
+    julia> angle = bond_angle(g,"C",1)
+    6-element Array{Float64,1}:
+     2.08208
+     1.93741
+     2.01737
+     1.87734
+     2.02827
+     2.01592
+
 Getting all the angles of an index group for all frames (in this case octane
-using only four frames):
+using only four frames - note there are two ways to do this):
 
     julia> angle = bond_angle(g.x["C"],g.box)
+    6x4 Array{Float64,2}:
+     2.08208  2.03211  1.96856  1.86377
+     1.93741  1.92178  2.01451  1.92411
+     2.01737  2.04895  1.93338  1.98445
+     1.87734  1.98397  2.00395  1.8616 
+     2.02827  2.00471  2.03594  2.04358
+     2.01592  1.9744   1.83227  2.0012 
+
+    julia> angle = bond_angle(g,"C")
     6x4 Array{Float64,2}:
      2.08208  2.03211  1.96856  1.86377
      1.93741  1.92178  2.01451  1.92411
