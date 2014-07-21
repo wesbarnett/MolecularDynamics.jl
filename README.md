@@ -1,12 +1,9 @@
 MolecularDynamics
 =================
-James W. Barnett
-
+James W. Barnett    
 jbarnet4@tulane.edu
 
-master: !["status"](https://travis-ci.org/wesbarnett/MolecularDynamics.jl.svg?branch=master)
-
-develop: !["status"](https://travis-ci.org/wesbarnett/MolecularDynamics.jl.svg?branch=develop)
+!["status"](https://travis-ci.org/wesbarnett/MolecularDynamics.jl.svg?branch=develop)
 
 "MolecularDynamics" is a [Julia](http://www.julialang.org) package for the 
 reading in and analysis of [Gromacs](http://www.gromacs.org) Molecular Dynamics
