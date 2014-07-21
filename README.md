@@ -3,8 +3,6 @@ MolecularDynamics
 James W. Barnett    
 jbarnet4@tulane.edu
 
-!["status"](https://travis-ci.org/wesbarnett/MolecularDynamics.jl.svg?branch=develop)
-
 "MolecularDynamics" is a [Julia](http://www.julialang.org) package for the 
 reading in and analysis of [Gromacs](http://www.gromacs.org) Molecular Dynamics
 simulations. The goal is to provide a small and simple framework for simulation analysis.
@@ -48,6 +46,19 @@ To start using the package do the following:
 
     julia> using MolecularDynamics
 
+
+Contributing
+------------
+
+Please feel free to contribute to this project by forking the source code and then 
+initiating pull requests. The development version of the project is in the branch "develop." Stable
+versions of the project are in the branch "master" and tagged with release
+numbers.
+
+A few tests are done to see if a build is passing. Here is the develop branch
+status:
+
+!["status"](https://travis-ci.org/wesbarnett/MolecularDynamics.jl.svg?branch=develop)
 
 Example Usage
 --------------
