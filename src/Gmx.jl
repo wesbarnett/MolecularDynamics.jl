@@ -170,7 +170,7 @@ function read_gmx(xtc_file::String,first::Int=1,last::Int=100000,skip::Int=1,
 
     end 
 
-    println(char(13),"Saved ", no_frames, " frames.")
+    println(char(13),"Saved ", no_frames, " frames.      ")
 
     # Resize the arrays
     box_array = fill!(Array(Any,no_frames),Array(Float32,(3,3)))
