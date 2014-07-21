@@ -1,6 +1,6 @@
 module MolecularDynamics
 
-import .Xtc: xtc_init, read_xtc, close_xtc
+using .Xtc
 import .Ndx: read_ndx
 import .Gmx: read_gmx
 import .Utils: pbc, bond_angle, dih_angle, rdf, prox_rdf, box_vol
