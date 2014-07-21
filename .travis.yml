@@ -22,3 +22,4 @@ script:
     - ./configure --enable-shared
     - make
     - make install
+    - julia test/read_test.jl
