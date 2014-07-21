@@ -8,7 +8,9 @@ module Utils
 export pbc, 
        dih_angle,
 	   bond_angle,
-       rdf
+       rdf,
+       prox_rdf,
+	   box_vol
 
 # Adjusts for periodic boundary condition. Input is a three-dimensional
 # vector (the position) and the box ( 3 x 3 Array). A 3d vector is returned.
@@ -172,6 +174,19 @@ function dih_angle(f::Array{Any,1},box::Array{Any,1})
 
 end
 
+function box_vol(box::Array{Float32,2})
+
+    vol = (box[1,1] * box[2,2] * box[3,3] +
+           box[1,2] * box[2,3] * box[3,1] +
+           box[1,3] * box[2,1] * box[3,2] - 
+           box[1,3] * box[2,2] * box[3,1] +
+           box[1,2] * box[2,1] * box[3,3] +
+           box[1,1] * box[2,3] * box[3,2] )
+
+    return vol
+
+end
+
 function bin_rdf(g,atom_i,atom_j,box,nbins::Int,bin_width::Float64,r_excl2::Float64)
 
     dx = atom_i - atom_j
@@ -243,6 +258,7 @@ function do_rdf_binning(g,gmx,nbins::Int,bin_width::Float64,r_excl2::Float64,gro
 
 end
 
+# Radial distribution function
 # TODO: this is only for a constant volume cubic box
 function rdf(gmx,group1::String,group2::String,bin_width=0.002::Float64,r_excl=0.1::Float64)
 
@@ -262,10 +278,12 @@ function rdf(gmx,group1::String,group2::String,bin_width=0.002::Float64,r_excl=0
 
 end
 
-function rdf(gmx,group1:String,bin_width=0.002::Float64,r_excl=0.1::Float64)
+function rdf(gmx,group1::String,bin_width=0.002::Float64,r_excl=0.1::Float64)
 
     g = rdf(gmx,group1,group1,bin_width,r_excl)
 
     return g
+
+end
 
 end

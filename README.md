@@ -479,6 +479,40 @@ All angles in the first frame:
      -2.4199 
       2.8746 
 
+####Radial Distribution Function
+
+First read in the two groups with "read_gmx". In this case it is the carbon of a
+single methane and the water oxygens:
+
+    julia> gmx = read_gmx(".julia/v0.3/MolecularDynamics/examples/rdf/traj.xtc",".julia/v0.3/MolecularDynamics/examples/rdf/index.ndx","C","OW");
+
+Then pass the entire gmxType object and the name of the two groups to be used.
+You'll receive a warning that this function is only for constant volume, cubic
+box simulations at this point..
+
+    julia> g = rdf(gmx,"C","OW");
+
+Optionally you can select the binwidth (default: 0.002 nm) and the exclusion distance (default: 0.1 nm) for not
+counting those atoms that are to close (and part of the same molecule):
+
+    julia> g = rdf(gmx,"C","OW",0.002,0.1);
+
+If you are just using one group (say you have several methanes and you want to
+find the distribution between them), just pass one group name:
+
+    julia> g = rdf(gmx,"C");
+
+A tuple with the distances corresponding to the bins and the distribution is
+returned. To plot quickly you can use the "Gaston" package:
+
+    julia> using Gaston
+
+    julia> plot(g[1],g[2],"title","","xlabel","r (nm)","ylabel","g(r)")
+
+For the methane C - water O distribution it looks like:
+
+!["Radial Distribution Function"](images/rdf.png)
+
 ###Using Other Packages
 #### Dihedral Angle Distribution
 As an example on how to use another package to help analyze some data, you could
