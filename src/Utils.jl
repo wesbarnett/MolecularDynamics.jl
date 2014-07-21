@@ -157,6 +157,12 @@ function dih_angle(a::Array{Float32,2},box::Array{Float32,2})
 
 end
 
+function dih_angle(gmx,group::String,frame::Int)
+
+    return dih_angle(gmx.x[group][frame],gmx.box[frame])
+
+end
+
 # Cycles through all frames
 function dih_angle(f::Array{Any,1},box::Array{Any,1})
 
@@ -171,6 +177,12 @@ function dih_angle(f::Array{Any,1},box::Array{Any,1})
 	end
 
     return angles
+
+end
+
+function dih_angle(gmx,group::String)
+
+    return dih_angle(gmx.x[group],gmx.box)
 
 end
 
