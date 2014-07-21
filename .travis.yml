@@ -23,4 +23,5 @@ script:
     - export LD_LIBRARY_PATH=LD_LIBRARY_PATH:/home/travis/xdrfile/lib
     - make
     - make install
+    - cd ..
     - julia test/read_test.jl
