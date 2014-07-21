@@ -284,4 +284,55 @@ function rdf(gmx,group1::String,bin_width=0.002::Float64,r_excl=0.1::Float64)
 
 end
 
+function do_prox_rdf_binning(g,gmx,nbins::Int,bin_width::Float64,r_excl2::Float64,group1::String,group2::String)
+
+    nsites = gmx.natoms[group1]
+    test_vec = Array(Float64,3)
+    test_mag = Array(Float64,nsites)
+
+    for frame in 1:gmx.no_frames
+
+        if frame % 1000 == 0
+		    print(char(13),"Binning frame: ",frame)
+        end
+
+        for i in 1:gmx.natoms[group2]
+
+            atom_i = gmx.x[group1][frame][:,i]
+
+            for j in 1:gmx.nsites
+
+                atom_j = gmx.x[group1][frame][:,j]
+
+                test_vec = atom_i - atom_j
+                test_vec = pbc(test_vec,gmx.box[frame])
+                test_mag[j] = sqrt(dot(test_vec,test_vec))
+
+            end
+
+            site = indmin(test_mag)
+
+            atom_j = gmx.x[group1][frame][:,site]
+
+            bin_rdf(g,atom_i,atom_j,gmx.box[frame],nbins,bin_width,r_excl2)
+
+        end
+
+    end 
+
+    return g
+
+end
+
+function prox_rdf(gmx,group1::String,group2::String,bin_width=0.002::Float64,r_excl=0.1::Float64)
+
+    println("WARNING: this function only works for a constant volume cubic box.")
+    r_excl2 = r_excl^2
+
+    nbins =  iround( gmx.box[1][1,1] / (2.0 * bin_width) )
+
+    g = zeros(Float64,nbins)
+
+    g = do_prox_rdf_binning(g,gmx,nbins,bin_width,r_excl2,group1,group2)
+
 end
