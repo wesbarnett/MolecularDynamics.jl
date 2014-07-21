@@ -5,9 +5,7 @@
 # program only works with a constant volume system and with a box that is
 # cubic. This version does the binning part in parallel.
 
-using MolecularDynamicsAnalysis
-using MolecularDynamicsAnalysis.Gmx
-using MolecularDynamicsAnalysis.Utils
+using MolecularDynamics
 
 using ArgParse
 using PyPlot

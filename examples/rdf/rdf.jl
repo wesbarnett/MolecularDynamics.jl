@@ -4,9 +4,7 @@
 # "OW", which can be changed by the user in the main function. Note that this
 # program only works with a constant volume system and with a box that is cubic.
 
-using MolecularDynamicsAnalysis
-using MolecularDynamicsAnalysis.Gmx
-using MolecularDynamicsAnalysis.Utils
+using MolecularDynamics
 using ArgParse
 using PyPlot
 
