@@ -27,9 +27,18 @@ Requirements
 ------------
 
 The xdrfile library is required for reading in Gromacs xtc files. You can
-[download it here](http://www.gromacs.org/Downloads) (bottom of the page). Make
-sure you install the library as a shared library; there is an option when you
-configure the installation.
+[download it here](http://www.gromacs.org/Downloads) (bottom of the page). You
+must enable building it as a shared library. Here is how to download and install
+the library:
+
+    wget ftp://ftp.gromacs.org/pub/contrib/xdrfile-1.1.1.tar.gz
+    tar xvzf xdrfile-1.1.1.tar.gz
+    cd xdrfile-1.1.1
+    ./configure --enable-shared
+    make -j N
+    sudo make install
+
+'N' is the number of processors with which to build.
 
 Installation
 ------------
