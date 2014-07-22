@@ -358,7 +358,7 @@ function calc_prox_vol(g,gmx,group1,frame)
 
                 point = [x, y, z]
 
-                do j in 1:nsites
+                for j in 1:nsites
 
                     test_vec = point - gmx.x[group1][frame]
                     test_vec = pbc(test_vec,gmx.box[frame])
