@@ -300,9 +300,7 @@ function do_prox_rdf_binning(g,gmx,nbins::Int,bin_width::Float64,r_excl2::Float6
 
     for frame in 1:gmx.no_frames
 
-        if frame % 1000 == 0
-		    print(char(13),"Binning frame: ",frame)
-        end
+        print(char(13),"Binning frame: ",frame)
 
         for i in 1:gmx.natoms[group2]
 
@@ -326,20 +324,28 @@ function do_prox_rdf_binning(g,gmx,nbins::Int,bin_width::Float64,r_excl2::Float6
         vol = box_vol(gmx.box[frame])
         bin_vols = calc_prox_vol(g,gmx,group1,nbins,bin_width,frame)
 
-        g_tmp += g * vol / bin_vols + g_tmp
+        for k in 1:nbins
+            g_tmp[k] += g[k] * vol / bin_vols[k]
+        end
         g = zeros(Float64,nbins)
 
     end 
 
     g = g_tmp / (gmx.no_frames * gmx.natoms[group2] * nsites)
 
-    return g
+    bin = Array(Float64,size(g,1))
+
+    for i in 1:size(g,1)
+        bin[i] = float(i) * bin_width
+    end
+
+    return bin, g
 
 end
 
 function calc_prox_vol(g,gmx,group1::String,nbins::Int,bin_width::Float64,frame::Int)
 
-    nrand = 1000
+    nrand = 100
     nsites = gmx.natoms[group1]
     tot_points = nrand * nsites
 
@@ -348,6 +354,7 @@ function calc_prox_vol(g,gmx,group1::String,nbins::Int,bin_width::Float64,frame:
 
     for bin in 1:nbins
 
+        print(char(13),bin)
         point_count = 0
 
         for site in 1:nsites
@@ -396,6 +403,7 @@ end
 function prox_rdf(gmx,group1::String,group2::String,bin_width=0.002::Float64,r_excl=0.1::Float64)
 
     println("WARNING: this function only works for a constant volume cubic box.")
+    println("This could take some time...")
     r_excl2 = r_excl^2
 
     nbins =  iround( gmx.box[1][1,1] / (2.0 * bin_width) )
