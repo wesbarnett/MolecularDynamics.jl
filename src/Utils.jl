@@ -344,6 +344,7 @@ function calc_prox_vol(g,gmx,group1::String,nbins::Int,bin_width::Float64,frame:
     tot_points = nrand * nsites
 
     test_mag = Array(Float64,nsites)
+    bin_vols = Array(Float64,nbins)
 
     for bin in 1:nbins
 
