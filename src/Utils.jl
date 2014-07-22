@@ -43,6 +43,12 @@ function pbc(a::Array{Float32,1},box::Array{Float32,2})
 
 end
 
+function pbc(a::Array{Float64,1},box::Array{Float32,2}) 
+
+    b = pbc(float32(a),box)
+
+end
+
 # Returns bond angle using the input of three atoms' coordinates. Angle
 # is in radians
 function bond_angle(i::Array{Float32,1},j::Array{Float32,1},
@@ -300,9 +306,9 @@ function do_prox_rdf_binning(g,gmx,nbins::Int,bin_width::Float64,r_excl2::Float6
 
         for i in 1:gmx.natoms[group2]
 
-            atom_i = gmx.x[group1][frame][:,i]
+            atom_i = gmx.x[group2][frame][:,i]
 
-            for j in 1:gmx.nsites
+            for j in 1:nsites
 
                 atom_j = gmx.x[group1][frame][:,j]
                 test_vec = atom_i - atom_j
@@ -318,7 +324,7 @@ function do_prox_rdf_binning(g,gmx,nbins::Int,bin_width::Float64,r_excl2::Float6
         end
 
         vol = box_vol(gmx.box[frame])
-        bin_vols = calc_prox_vol(g,gmx,frame)
+        bin_vols = calc_prox_vol(g,gmx,group1,nbins,bin_width,frame)
 
         g_tmp += g * vol / bin_vols + g_tmp
         g = zeros(Float64,nbins)
@@ -331,7 +337,7 @@ function do_prox_rdf_binning(g,gmx,nbins::Int,bin_width::Float64,r_excl2::Float6
 
 end
 
-function calc_prox_vol(g,gmx,group1,frame)
+function calc_prox_vol(g,gmx,group1::String,nbins::Int,bin_width::Float64,frame::Int)
 
     nrand = 1000
     nsites = gmx.natoms[group1]
@@ -350,7 +356,7 @@ function calc_prox_vol(g,gmx,group1,frame)
                 myrand = rand(3)
                 theta = myrand[1] * pi
                 phi = myrand[2] * 2.0 * pi
-                r = myrand[3] * bin_width (float(bin)-1.0) * bin_width
+                r = myrand[3] * bin_width * (float(bin)-1.0) * bin_width
 
                 x = r * sin(theta) * cos(phi)
                 y = r * sin(theta) * sin(phi)
@@ -360,9 +366,9 @@ function calc_prox_vol(g,gmx,group1,frame)
 
                 for j in 1:nsites
 
-                    test_vec = point - gmx.x[group1][frame]
+                    test_vec = point - gmx.x[group1][frame][:,j]
                     test_vec = pbc(test_vec,gmx.box[frame])
-                    test_mag(j) = sqrt(dot(test_vec,test_vec))
+                    test_mag[j] = sqrt(dot(test_vec,test_vec))
 
                 end
 
@@ -374,7 +380,7 @@ function calc_prox_vol(g,gmx,group1,frame)
 
         end
 
-        r = float[bin] + 0.5
+        r = float(bin) + 0.5
         bin_vols[bin] = r^3 - (r-1.0)^3
         bin_vols[bin] *= 4.0/3.0 * pi * (bin_width)^3
 
