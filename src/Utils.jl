@@ -398,3 +398,5 @@ function prox_rdf(gmx,group1::String,group2::String,bin_width=0.002::Float64,r_e
     g = do_prox_rdf_binning(g,gmx,nbins,bin_width,r_excl2,group1,group2)
 
 end
+
+end
