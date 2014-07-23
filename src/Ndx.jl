@@ -88,6 +88,14 @@ function read_ndx(filename::String)
                 for J in 6:6:length(line_array)
                     number = parseint(Int,line_array[J-5:J])
                     push!(locs,number)
+                    if ndigits(number) < 5
+                        for L in J+5:5:length(line_array)
+                            read6 = false
+                            number = parseint(Int,line_array[L-4:L])
+                            push!(locs,number)
+                        end
+                        break
+                    end
                 end
             end
         end
