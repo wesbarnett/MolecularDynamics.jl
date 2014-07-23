@@ -27,9 +27,18 @@ Requirements
 ------------
 
 The xdrfile library is required for reading in Gromacs xtc files. You can
-[download it here](http://www.gromacs.org/Downloads) (bottom of the page). Make
-sure you install the library as a shared library; there is an option when you
-configure the installation.
+[download it here](http://www.gromacs.org/Downloads) (bottom of the page). You
+must enable building it as a shared library. Here is how to download and install
+the library:
+
+    wget ftp://ftp.gromacs.org/pub/contrib/xdrfile-1.1.1.tar.gz
+    tar xvzf xdrfile-1.1.1.tar.gz
+    cd xdrfile-1.1.1
+    ./configure --enable-shared
+    make -j N
+    sudo make install
+
+'N' is the number of processors with which to build.
 
 Installation
 ------------
@@ -380,7 +389,7 @@ Note that I'm just passing xyz coordinates as the first three arguments:
      3.818
 
 Getting all the bond angles of an index group (like a linear alkane) for a
-single frame:
+single frame - note the two different methods:
 
     julia> angle = bond_angle(g.x["C"][1],g.box[1])
     6-element Array{Float64,1}:
@@ -391,10 +400,28 @@ single frame:
      2.02827
      2.01592
 
+    julia> angle = bond_angle(g,"C",1)
+    6-element Array{Float64,1}:
+     2.08208
+     1.93741
+     2.01737
+     1.87734
+     2.02827
+     2.01592
+
 Getting all the angles of an index group for all frames (in this case octane
-using only four frames):
+using only four frames - note there are two ways to do this):
 
     julia> angle = bond_angle(g.x["C"],g.box)
+    6x4 Array{Float64,2}:
+     2.08208  2.03211  1.96856  1.86377
+     1.93741  1.92178  2.01451  1.92411
+     2.01737  2.04895  1.93338  1.98445
+     1.87734  1.98397  2.00395  1.8616 
+     2.02827  2.00471  2.03594  2.04358
+     2.01592  1.9744   1.83227  2.0012 
+
+    julia> angle = bond_angle(g,"C")
     6x4 Array{Float64,2}:
      2.08208  2.03211  1.96856  1.86377
      1.93741  1.92178  2.01451  1.92411
@@ -435,7 +462,7 @@ Using the coordinates of four atoms making up the angle:
     -1.384181494375928
 
 Using one frame to return all angles in a sequence (in this case all the angles
-in octane):
+in octane - note the two different ways to do this):
 
     julia> g.x["C"][1]
     3x8 Array{Float32,2}:
@@ -451,10 +478,27 @@ in octane):
      -2.4199 
       2.8746 
 
+    julia> angle = dih_angle(g,"C",1)
+    5-element Array{Float64,1}:
+     -1.38418
+     -3.00861
+      2.95432
+     -2.4199 
+      2.8746 
+
 Using all frames to get all angles (in this case all frames of all carbons in octane;
-I only read in the first four frames into "g" using "read_gmx"):
+I only read in the first four frames into "g" using "read_gmx"). Again, note the
+two different ways of doing this:
 
     julia> angle = dih_angle(g.x["C"],g.box)
+    5x4 Array{Float64,2}:
+     -1.38418  -1.26239  -1.16925  -1.2465 
+     -3.00861  -2.95298   3.00907  -2.70884
+      2.95432   2.70807  -2.78729   3.09729
+     -2.4199    2.92933   3.04705   2.89244
+      2.8746    1.48004   1.14063   1.23341
+
+    julia> angle = dih_angle(g,"C")
     5x4 Array{Float64,2}:
      -1.38418  -1.26239  -1.16925  -1.2465 
      -3.00861  -2.95298   3.00907  -2.70884

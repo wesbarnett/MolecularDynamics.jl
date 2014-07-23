@@ -1,0 +1,9 @@
+#!/bin/bash
+wget ftp://ftp.gromacs.org/pub/contrib/xdrfile-1.1.1.tar.gz
+tar xvzf xdrfile-1.1.1.tar.gz
+cd xdrfile-1.1.1
+./configure --enable-shared
+make -j 4
+sudo make install
+cd ..
+rm -rf xdrfile*
