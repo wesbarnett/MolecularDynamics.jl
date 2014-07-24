@@ -78,11 +78,7 @@ function bond_angle(a::Array{Float32,2},box::Array{Float32,2})
 
 end
 
-function bond_angle(gmx,group::String,frame::Int)
-
-    return bond_angle(gmx.x[group][frame],gmx.box[frame])
-
-end
+bond_angle(gmx,group::String,frame::Int) = bond_angle(gmx.x[group][frame],gmx.box[frame])
 
 # Cycles through all frames
 function bond_angle(f::Array{Any,1},box::Array{Any,1})
@@ -101,11 +97,7 @@ function bond_angle(f::Array{Any,1},box::Array{Any,1})
 end
 
 # Alternative call to cycle through frames.
-function bond_angle(gmx,group::String)
-
-    return bond_angle(gmx.x[group],gmx.box)
-
-end
+bond_angle(gmx,group::String) = bond_angle(gmx.x[group],gmx.box)
 
 #= 
    Function calculates the torsion / dihedral angle from four atoms'
@@ -167,11 +159,7 @@ function dih_angle(a::Array{Float32,2},box::Array{Float32,2})
 
 end
 
-function dih_angle(gmx,group::String,frame::Int)
-
-    return dih_angle(gmx.x[group][frame],gmx.box[frame])
-
-end
+dih_angle(gmx,group::String,frame::Int) = dih_angle(gmx.x[group][frame],gmx.box[frame])
 
 # Cycles through all frames
 function dih_angle(f::Array{Any,1},box::Array{Any,1})
@@ -187,11 +175,7 @@ function dih_angle(f::Array{Any,1},box::Array{Any,1})
 
 end
 
-function dih_angle(gmx,group::String)
-
-    return dih_angle(gmx.x[group],gmx.box)
-
-end
+dih_angle(gmx,group::String) = dih_angle(gmx.x[group],gmx.box)
 
 function box_vol(box::Array{Float32,2})
 
