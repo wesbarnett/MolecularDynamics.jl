@@ -68,12 +68,10 @@ end
 
 function bond_angle(a::Array{Float32,2},box::Array{Float32,2})
 
-	angle = Float64[]
+    angle = Array(Float64,size(a,2)-2)
 
 	for i in 1:size(a,2)-2
-
-		angle = push!(angle,bond_angle(a[:,i],a[:,i+1],a[:,i+2],box))
-
+		angle[i] = bond_angle(a[:,i],a[:,i+1],a[:,i+2],box)
 	end
 
 	return angle
@@ -90,12 +88,11 @@ end
 function bond_angle(f::Array{Any,1},box::Array{Any,1})
 
 
-    angles = Array(Float64,(size(f[1],2)-2,1))
-	angles = bond_angle(f[1],box[1])
+    angles = Array(Float64,(size(f[1],2)-2,1),size(f,1))
 
-	for i in 2:size(f,1)
+	for i in 1:size(f,1)
 
-		angles = hcat(angles,bond_angle(f[i],box[i]))
+		angles[:,i] = bond_angle(f[i],box[i])
 
 	end
 
@@ -158,7 +155,6 @@ end
 # Cycles through sequence of dihedral angles
 function dih_angle(a::Array{Float32,2},box::Array{Float32,2})
 
-	angle = Float64[]
     angle = Array(Float64,size(a,2)-3)
 
 	for i in 1:size(a,2)-3
