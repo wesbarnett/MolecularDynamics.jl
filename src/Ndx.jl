@@ -16,6 +16,7 @@ function read_ndx(filename::String)
     title_line_tmp = Array(Int,100)
     title_count = 0
     loc_tmp = Int64[]
+    println("Reading index groups from ",filename,".")
     f = open(filename)
     all_lines = readlines(f)
     close(f)
