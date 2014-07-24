@@ -21,9 +21,7 @@ function xtc_init(xtcfile)
     println(string("Initializing "), xtcfile)
 
     # Check if file exists
-    if (~isfile(xtcfile)) 
-        error(string(xtcfile," xtc file does not exist."))
-    end
+    ~isfile(xtcfile) || error(string(xtcfile," xtc file does not exist."))
 
     # Get number of atoms in system
     natoms = Cint[0]
@@ -32,9 +30,7 @@ function xtc_init(xtcfile)
     println(string("No. of atoms = ", natoms[]))
 
     # Check if we actually did open the file
-    if (stat != 0)
-        error(string("Failure in opening ", xtcfile))
-    end
+    stat != 0 || error(string("Failure in opening ", xtcfile))
 
     # Get C xdrfile pointer
     xd = ccall( (:xdrfile_open,"libxdrfile"), Ptr{Void},
@@ -60,7 +56,7 @@ function read_xtc(xtc)
         Ptr{Cint}, Ptr{Cfloat}, Ptr{Cfloat}, Ptr{Cfloat}, Ptr{Cfloat} ), xtc.xd,
         xtc.natoms, xtc.step, xtc.time, xtc.box, xtc.x, xtc.prec) 
 
-    if (stat != 0 | stat != 11)
+    if (stat != 0 || stat != 11)
         error("Failure in reading xtc frame.")
     end
 
@@ -71,6 +67,11 @@ end
 function close_xtc(xtc)
 
     stat = ccall( (:xdrfile_close,"libxdrfile"), Int32, ( Ptr{Void}, ), xtc.xd)
+    if (stat == 0)
+        println("Closed ", xtcfile,".")
+    else
+        println("Error closing ", xtcfile,"!")
+    end
 
 	return stat
 
