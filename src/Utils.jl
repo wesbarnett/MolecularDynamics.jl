@@ -159,10 +159,11 @@ end
 function dih_angle(a::Array{Float32,2},box::Array{Float32,2})
 
 	angle = Float64[]
+    angle = Array(Float64,size(a,2)-3)
 
 	for i in 1:size(a,2)-3
 
-		angle = push!(angle,dih_angle(a[:,i],a[:,i+1],a[:,i+2],a[:,i+3],box))
+		angle[i] = dih_angle(a[:,i],a[:,i+1],a[:,i+2],a[:,i+3],box)
 
 	end
 
@@ -180,13 +181,10 @@ end
 function dih_angle(f::Array{Any,1},box::Array{Any,1})
 
 
-    angles = Array(Float64,(size(f[1],2)-3,1))
-	angles = dih_angle(f[1],box[1])
+    angles = Array(Float64,(size(f[1],2)-3,size(f,1)))
 
-	for i in 2:size(f,1)
-
-		angles = hcat(angles,dih_angle(f[i],box[i]))
-
+	for i in 1:size(f,1)
+		angles[:,i] = dih_angle(f[i],box[i])
 	end
 
     return angles
