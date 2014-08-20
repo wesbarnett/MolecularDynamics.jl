@@ -188,7 +188,7 @@ function read_gmx(xtc_file::String,first::Int=1,last::Int=100000,skip::Int=1,
 		x_dict,
 		natoms_dict )
 
-	gmx.no_frames = save_frame
+	gmx.no_frames = save_frame - 1
     gmx.time = gmx_tmp.time[1:save_frame]
 	gmx.box[:] = gmx_tmp.box[1:save_frame]
 	gmx.natoms = gmx_tmp.natoms
