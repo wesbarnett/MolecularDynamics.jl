@@ -170,6 +170,8 @@ function read_gmx(xtc_file::String,first::Int=1,last::Int=100000,skip::Int=1,
 
     end 
 
+    save_frame -= 1
+
     println(char(13),"Saved ", save_frame, " frames.      ")
 
     # Resize the arrays
@@ -188,13 +190,13 @@ function read_gmx(xtc_file::String,first::Int=1,last::Int=100000,skip::Int=1,
 		x_dict,
 		natoms_dict )
 
-	gmx.no_frames = save_frame - 1
-    gmx.time = gmx_tmp.time[1:save_frame]
-	gmx.box[:] = gmx_tmp.box[1:save_frame]
+	gmx.no_frames = save_frame
+    gmx.time = gmx_tmp.time[1:gmx.no_frames]
+	gmx.box[:] = gmx_tmp.box[1:gmx.no_frames]
 	gmx.natoms = gmx_tmp.natoms
 
 	for i in group
-		gmx.x[i] = gmx_tmp.x[i][1:save_frame]
+		gmx.x[i] = gmx_tmp.x[i][1:gmx.no_frames]
 	end
 	
     return gmx
