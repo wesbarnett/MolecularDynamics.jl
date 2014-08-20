@@ -170,31 +170,33 @@ function read_gmx(xtc_file::String,first::Int=1,last::Int=100000,skip::Int=1,
 
     end 
 
-    println(char(13),"Saved ", no_frames, " frames.      ")
+    save_frame -= 1
+
+    println(char(13),"Saved ", save_frame, " frames.      ")
 
     # Resize the arrays
-    box_array = fill!(Array(Any,no_frames),Array(Float32,(3,3)))
+    box_array = fill!(Array(Any,save_frame),Array(Float32,(3,3)))
 
 	for i in group
 
-		x_dict[i] = fill!(Array(Any,no_frames),Array(Float32,(3,int64(gmx_tmp.natoms[i]))))
+		x_dict[i] = fill!(Array(Any,save_frame),Array(Float32,(3,int64(gmx_tmp.natoms[i]))))
 
 	end
 
 	gmx = gmxType(
-		no_frames,
-		Array(Float32,no_frames),
+		save_frame,
+		Array(Float32,save_frame),
 		box_array,
 		x_dict,
 		natoms_dict )
 
-	gmx.no_frames = no_frames
-    gmx.time = gmx_tmp.time[1:no_frames]
-	gmx.box[:] = gmx_tmp.box[1:no_frames]
+	gmx.no_frames = save_frame
+    gmx.time = gmx_tmp.time[1:gmx.no_frames]
+	gmx.box[:] = gmx_tmp.box[1:gmx.no_frames]
 	gmx.natoms = gmx_tmp.natoms
 
 	for i in group
-		gmx.x[i] = gmx_tmp.x[i][1:no_frames]
+		gmx.x[i] = gmx_tmp.x[i][1:gmx.no_frames]
 	end
 	
     return gmx
