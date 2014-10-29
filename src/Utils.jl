@@ -51,7 +51,7 @@ function pbc(a::Array{Float64,1},box::Array{Float32,2})
 end
 
 # Calculates the distance squared between two atoms
-function dist2(gmx,frame,atomi,atomj,grpi,grpj)
+function dist2(gmx::gmxType,frame::Int,atomi::Int,atomj::Int,grpi::String,grpj::String)
     dr = Array(Float32,3)
     dr = gmx.x[grpi][frame][:,atomi] - gmx.x[grpj][frame][:,atomj]
     dr = pbc(dr,gmx.box[frame])
@@ -59,9 +59,22 @@ function dist2(gmx,frame,atomi,atomj,grpi,grpj)
     return r2
 end
 
+# Also gets the distance squared with the arguments being the two vectors of the
+# atoms and the box.
+function dist2(atomi::Array{Float32,1},atomj::Array{Float32,1},box::Array{Float32,2})
+    dr = Array(Float32,3)
+    dr = atomi - atomj
+    dr = pbc(dr,box)
+    r2 = dot(dr,dr)
+end
+
 # Calculates the distance between two atoms
-function dist(gmx,frame,atomi,atomj,grpi,grpj)
+function dist(gmx::gmxType,frame::Int,atomi::Int,atomj::Int,grpi::String,grpj::String)
     return sqrt(dist2(gmx,frame,atomi,atomj,grpi,grpj))
+end
+
+function dist(atomi::Array{Float32,1},atomj::Array{Float32,1},box::Array{Float32,2})
+    return sqrt(dist2(atomi,atomj,box))
 end
 
 # Returns bond angle using the input of three atoms' coordinates. Angle
