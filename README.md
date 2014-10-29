@@ -368,6 +368,26 @@ The magnitude is the distance:
     julia> sqrt(dot(a,a))
     2.547073301335343
 
+###Atomic Distances
+
+All of the above is simply an example. There are now to functions that can give
+you the distance squared and the distance between two atoms, given that you have
+read in data using read_gmx. Using the example from above, where the first atom
+of the "C" group and the first atom of the "OW" in frame one were used:
+
+    julia> d = dist(g,1,1,1,"C","OW")
+    2.547073301335343
+
+The arguments are the gmxType, the location of the first atom in its group, the
+location of the second atom in its group, the name of the first group, and the
+name of the second group.
+
+Alternatively, if you've already saved the vectors, as in the periodic boundary
+condition above:
+
+    julia> d = dist(atomi,atomj,gmx.box[frame])
+    2.547073301335343
+
 ####Bond Angles
 Use "bond_angle". There are several different methods, all of which return
 angles in radians:
