@@ -385,7 +385,7 @@ name of the second group.
 Alternatively, if you've already saved the vectors, as in the periodic boundary
 condition above:
 
-    julia> d = dist(atomi,atomj,gmx.box[frame])
+    julia> d = dist(atomi,atomj,g.box[1])
     2.547073301335343
 
 ####Bond Angles
