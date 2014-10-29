@@ -10,7 +10,8 @@ export pbc,
 	   bond_angle,
        rdf,
        prox_rdf,
-	   box_vol
+	   box_vol,
+       dist
 
 # Adjusts for periodic boundary condition. Input is a three-dimensional
 # vector (the position) and the box ( 3 x 3 Array). A 3d vector is returned.
@@ -46,6 +47,20 @@ end
 # Sometimes we need to pass a float64 to the above function.
 function pbc(a::Array{Float64,1},box::Array{Float32,2})
     return pbc(float32(a),box)
+end
+
+# Calculates the distance squared between two atoms
+function dist2(gmx,frame,atomi,atomj,grpi,grpj)
+    dr = Array(Float32,3)
+    dr = gmx.x[grpi][frame][:,atomi] - gmx.x[grpj][frame][:,atomj]
+    dr = pbc(dr,gmx.box[frame])
+    r2 = dot(dr,dr)
+    return r2
+end
+
+# Calculates the distance between two atoms
+function dist(gmx,frame,atomi,atomj,grpi,grpj)
+    return sqrt(dist2(gmx,frame,atomi,atomj,grpi,grpj))
 end
 
 # Returns bond angle using the input of three atoms' coordinates. Angle
