@@ -11,7 +11,8 @@ export pbc,
        rdf,
        prox_rdf,
 	   box_vol,
-       dist
+       dist,
+       dist2
 
 # Adjusts for periodic boundary condition. Input is a three-dimensional
 # vector (the position) and the box ( 3 x 3 Array). A 3d vector is returned.
