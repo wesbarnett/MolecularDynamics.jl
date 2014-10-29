@@ -51,7 +51,7 @@ function pbc(a::Array{Float64,1},box::Array{Float32,2})
 end
 
 # Calculates the distance squared between two atoms
-function dist2(gmx::gmxType,frame::Int,atomi::Int,atomj::Int,grpi::String,grpj::String)
+function dist2(gmx,frame::Int,atomi::Int,atomj::Int,grpi::String,grpj::String)
     dr = Array(Float32,3)
     dr = gmx.x[grpi][frame][:,atomi] - gmx.x[grpj][frame][:,atomj]
     dr = pbc(dr,gmx.box[frame])
@@ -69,7 +69,7 @@ function dist2(atomi::Array{Float32,1},atomj::Array{Float32,1},box::Array{Float3
 end
 
 # Calculates the distance between two atoms
-function dist(gmx::gmxType,frame::Int,atomi::Int,atomj::Int,grpi::String,grpj::String)
+function dist(gmx,frame::Int,atomi::Int,atomj::Int,grpi::String,grpj::String)
     return sqrt(dist2(gmx,frame,atomi,atomj,grpi,grpj))
 end
 
