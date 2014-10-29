@@ -10,7 +10,9 @@ export read_gmx,
 	   dih_angle,
        box_vol,
        rdf,
-       prox_rdf
+       prox_rdf,
+       dist,
+       dist2
 
 include("Xtc.jl")
 include("Ndx.jl")
