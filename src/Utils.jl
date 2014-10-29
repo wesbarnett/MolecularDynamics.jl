@@ -43,6 +43,11 @@ function pbc(a::Array{Float32,1},box::Array{Float32,2})
 
 end
 
+# Sometimes we need to pass a float64 to the above function.
+function pbc(a::Array{Float64,1},box::Array{Float32,2})
+    return pbc(float32(a),box)
+end
+
 # Returns bond angle using the input of three atoms' coordinates. Angle
 # is in radians
 function bond_angle(i::Array{Float32,1},j::Array{Float32,1},
