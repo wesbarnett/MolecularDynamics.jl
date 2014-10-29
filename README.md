@@ -370,7 +370,7 @@ The magnitude is the distance:
 
 ###Atomic Distances
 
-All of the above is simply an example. There are now to functions that can give
+All of the above is simply an example. There are now functions that can give
 you the distance squared and the distance between two atoms, given that you have
 read in data using read_gmx. Using the example from above, where the first atom
 of the "C" group and the first atom of the "OW" in frame one were used:
