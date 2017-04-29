@@ -11,6 +11,10 @@ instead intends to give a foundation for writing analysis software, making it
 easier to work with Gromacs files in Julia. Several statistical packages are
 available for Julia that can be used in conjunction with this package.
 
+**NOTE**: This package is incompatible with Julia >= 0.6. I do not plan on
+continuing to develop this package, but pull requests are welcome that update
+the package to be compatible with 0.6 and above.
+
 The following modules are included in this package:
 
 *  Gmx - the main file processing module. Combines Xtc and Ndx functions to 
