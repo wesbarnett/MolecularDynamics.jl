@@ -3,7 +3,7 @@
 # Module for reading in Gromacs index files.
 
 # Simply call "read_ndx(filename)" and a dictionary containing
-# the locations for each index group is returned. The names of the 
+# the locations for each index group is returned. The names of the
 # index group are the keys to the dictionary.
 
 module Ndx
@@ -12,8 +12,8 @@ export read_ndx
 
 function read_ndx(filename::String)
 
-    title_tmp = Array(String,100)
-    title_line_tmp = Array(Int,100)
+    title_tmp = Array{String}(undef,100)
+    title_line_tmp = Array{Int}(undef,100)
     title_count = 0
     loc_tmp = Int64[]
     f = open(filename)
@@ -32,7 +32,7 @@ function read_ndx(filename::String)
         # Check if it is a title
         if line[1] == '['
             title_count += 1
-            title_tmp[title_count] = line[3:end-3]
+            title_tmp[title_count] = line[3:end-2]
             title_line_tmp[title_count] = I
         end
 
@@ -40,10 +40,10 @@ function read_ndx(filename::String)
 
     close(f)
 
-    title = Array(String,title_count)
+    title = Array{String}(undef,title_count)
     title = title_tmp[1:title_count]
 
-    title_line = Array(Int,title_count)
+    title_line = Array{Int}(undef,title_count)
     title_line = title_line_tmp[1:title_count]
 
     ndx_dict = Dict()
@@ -53,6 +53,7 @@ function read_ndx(filename::String)
     line_array = 0
     K = 0
     locs = Int[]
+    read6 = false
 
     for I in 1:no_lines
 
@@ -71,14 +72,14 @@ function read_ndx(filename::String)
             line_array = readline(f)
             if ~read6
                 for J in 5:5:length(line_array)
-                    number = parseint(Int,line_array[J-4:J])
+                    number = parse(Int,line_array[J-4:J])
                     push!(locs,number)
                     # if a number is five digits switch how we read for the rest of
                     # the line
                     if ndigits(number) == 5
                         for L in J+6:6:length(line_array)
                             read6 = true
-                            number = parseint(Int,line_array[L-5:L])
+                            number = parse(Int,line_array[L-5:L])
                             push!(locs,number)
                         end
                         break
@@ -86,12 +87,12 @@ function read_ndx(filename::String)
                 end
             else
                 for J in 6:6:length(line_array)
-                    number = parseint(Int,line_array[J-5:J])
+                    number = parse(Int,line_array[J-5:J])
                     push!(locs,number)
                     if ndigits(number) < 5
                         for L in J+5:5:length(line_array)
                             read6 = false
-                            number = parseint(Int,line_array[L-4:L])
+                            number = parse(Int,line_array[L-4:L])
                             push!(locs,number)
                         end
                         break

@@ -1,9 +1,9 @@
 
 using MolecularDynamics
 
-gmx = read_gmx("examples/gmx-test/traj.xtc","examples/gmx-test/index.ndx","C")
+gmx = read_gmx(joinpath(@__DIR__,"../examples/gmx-test/traj.xtc"),joinpath(@__DIR__,"../examples/gmx-test/index.ndx"),"C")
 
-test = Array(Bool,3)
+test = Array{Bool}(undef,3)
 
 println()
 println("Testing libxdrfile reading...")
