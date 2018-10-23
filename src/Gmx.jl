@@ -10,11 +10,11 @@ import ..Xtc: xtc_init, read_xtc, close_xtc
 import ..Ndx: read_ndx
 
 #=	gmxType is what is returned at the end of running "read_gmx"
-	The variable "gmx" of gmxType is defined in "read_gmx" 
+	The variable "gmx" of gmxType is defined in "read_gmx"
 	and all the arrays are initialized there.
 
 	no_frames	-	number of frames that were read in
-                    note that time zero starts at frame 1 !!	
+                    note that time zero starts at frame 1 !!
 	time		-   the time at the current frame
 					accessed by "gmx.time[frame]"
 	box			-	the box of the current frame with dimensions 3 x 3
@@ -27,7 +27,7 @@ import ..Ndx: read_ndx
 					accessed by "gmx.natoms["Group"]
 =#
 
-type gmxType
+mutable struct gmxType
 	no_frames::Int
 	time
 	box
@@ -89,17 +89,17 @@ function read_gmx(xtc_file::String,first::Int=1,last::Int=100000,skip::Int=1,
 	if ndx_file=="0"
 
 		println("Saving all atoms.")
-  
+
 		# No groups were included since there was no index file
-		group = Array(String,1)
+		group = Array{String}(undef,1)
 		group[1] = "all"
 
 		# We use a dictionary for the natoms and coordinates even though
 		# we know there will be only one key. This is to remain consistent
 		# if we were to have multiple groups
-		natoms_dict["all"] = xtc.natoms
-		x_dict_tmp["all"] = fill!(Array(Any,last),Array(Float32,(3,int64(xtc.natoms))))
-  
+		natoms_dict["all"] = xtc.natoms[]
+		x_dict_tmp["all"] = fill!(Array{Any}(undef,last),Array{Float32}(undef,(3,Int(xtc.natoms[]))))
+
 	# if an index file is specified
 	else
 
@@ -117,16 +117,16 @@ function read_gmx(xtc_file::String,first::Int=1,last::Int=100000,skip::Int=1,
 			natoms = size(ndx_dict[i],1)
 			natoms_dict[i] = natoms
 		    println("  ",i," (",natoms," elements)")
-			x_dict_tmp[i] = fill!(Array(Any,last),Array(Float32,(3,int64(natoms))))
+			x_dict_tmp[i] = fill!(Array{Any}(undef,last),Array{Float32}(undef,(3,Int(natoms))))
 		end
 
 	end
 
-    box_array = fill!(Array(Any,last),Array(Float32,(3,3)))
+    box_array = fill!(Array{Any}(undef,last),Array{Float32}(undef,(3,3)))
 
 	gmx_tmp = gmxType(
 	    last,
-	    Array(Float32,last),
+	    Array{Float32}(undef,last),
 	    box_array,
 		x_dict_tmp,
 	 	natoms_dict)
@@ -149,14 +149,14 @@ function read_gmx(xtc_file::String,first::Int=1,last::Int=100000,skip::Int=1,
 		stat, xtc = read_xtc(xtc)
 
         if stat != 0
-            no_frames = int( (frame - first) / skip )
+            no_frames = Int( (frame - first) / skip )
 			break
 		end
 
 		if frame % 1000 == 0
-			print(char(13),"Reading frame: ",frame)
+			print(Char(13),"Reading frame: ",frame)
 		end
-		
+
 		if frame % skip == 0
 			if ndx_file == "0"
 				gmx_tmp = save_xtc_frame(gmx_tmp,save_frame,xtc)
@@ -168,24 +168,24 @@ function read_gmx(xtc_file::String,first::Int=1,last::Int=100000,skip::Int=1,
 			save_frame += 1
 		end
 
-    end 
+    end
 
     save_frame -= 1
 
-    println(char(13),"Saved ", save_frame, " frames.      ")
+    println(Char(13),"Saved ", save_frame, " frames.      ")
 
     # Resize the arrays
-    box_array = fill!(Array(Any,save_frame),Array(Float32,(3,3)))
+    box_array = fill!(Array{Any}(undef,save_frame),Array{Float32}(undef,(3,3)))
 
 	for i in group
 
-		x_dict[i] = fill!(Array(Any,save_frame),Array(Float32,(3,int64(gmx_tmp.natoms[i]))))
+		x_dict[i] = fill!(Array{Any}(undef,save_frame),Array{Float32}(undef,(3,Int(gmx_tmp.natoms[i]))))
 
 	end
 
 	gmx = gmxType(
 		save_frame,
-		Array(Float32,save_frame),
+		Array{Float32}(undef,save_frame),
 		box_array,
 		x_dict,
 		natoms_dict )
@@ -198,7 +198,7 @@ function read_gmx(xtc_file::String,first::Int=1,last::Int=100000,skip::Int=1,
 	for i in group
 		gmx.x[i] = gmx_tmp.x[i][1:gmx.no_frames]
 	end
-	
+
     return gmx
 
 end
