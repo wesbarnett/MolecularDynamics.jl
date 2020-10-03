@@ -1,7 +1,9 @@
 MolecularDynamics
 =================
-James W. Barnett    
-jbarnet4@tulane.edu
+
+**Update 10/03/2020: This package is incompatible with Julia >= 0.6. I do not plan on
+continuing to develop this package, but forks are welcome that update
+the package to be compatible with 0.6 and above.**
 
 "MolecularDynamics" is a [Julia](http://www.julialang.org) package for the 
 reading in and analysis of [Gromacs](http://www.gromacs.org) Molecular Dynamics
@@ -10,10 +12,6 @@ This project does not intend to provide every analytical tool possible, but
 instead intends to give a foundation for writing analysis software, making it
 easier to work with Gromacs files in Julia. Several statistical packages are
 available for Julia that can be used in conjunction with this package.
-
-**NOTE**: This package is incompatible with Julia >= 0.6. I do not plan on
-continuing to develop this package, but pull requests are welcome that update
-the package to be compatible with 0.6 and above.
 
 The following modules are included in this package:
 
